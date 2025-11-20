@@ -3,26 +3,21 @@ service: pardos-orders
 
 provider:
   name: aws
-  runtime: python3.12
-  region: us-east-1
-  stage: dev
-  httpApi:
-    cors: true
+  runtime: python3.13
+  memorySize: 1024
+  timeout: 20
+  iam:
+    role: arn:aws:iam::663025695161:role/LabRole   # mismo estilo que tu ejemplo
   environment:
-    TENANTS_TABLE: Tenants-${self:provider.stage}
-    MENU_TABLE: MenuItems-${self:provider.stage}
-    ORDERS_TABLE: Orders-${self:provider.stage}
-    ORDER_EVENTS_TABLE: OrderEvents-${self:provider.stage}
-    EVENTS_BUS_NAME: pardos-orders-bus-${self:provider.stage}
-    REPORTS_BUCKET: pardos-orders-reports-${self:provider.stage}
-
-package:
-  patterns:
-    - "!node_modules/**"
-    - "src/**"
+    TENANTS_TABLE: ${sls:stage}-Tenants
+    MENU_TABLE: ${sls:stage}-MenuItems
+    ORDERS_TABLE: ${sls:stage}-Orders
+    ORDER_EVENTS_TABLE: ${sls:stage}-OrderEvents
+    EVENTS_BUS_NAME: ${sls:stage}-pardos-orders-bus
+    REPORTS_BUCKET: ${sls:stage}-pardos-orders-reports
 
 functions:
-  # ---------- MS TENANTS & MENU ----------
+  # -------- MS TENANTS & MENU --------
   getTenants:
     handler: src/ms_tenants_menu/get_tenants.handler
     events:
@@ -44,7 +39,7 @@ functions:
           path: /tenants/{tenantId}/menu
           method: post
 
-  # ---------- MS ORDERS ----------
+  # -------- MS ORDERS (CLIENTE) --------
   createOrder:
     handler: src/ms_orders/create_order.handler
     events:
@@ -66,7 +61,7 @@ functions:
           path: /tenants/{tenantId}/orders
           method: get
 
-  # ---------- MS WORKFLOW ----------
+  # -------- MS WORKFLOW (RESTAURANTE) --------
   updateOrderStep:
     handler: src/ms_workflow/update_order_step.handler
     events:
@@ -81,6 +76,7 @@ functions:
           path: /tenants/{tenantId}/dashboard
           method: get
 
+  # Exportador diario a S3 (reportes)
   exportDailyReport:
     handler: src/ms_workflow/export_daily_report.handler
     events:
@@ -88,59 +84,25 @@ functions:
           rate: rate(1 day)
           enabled: true
 
-stepFunctions:
-  stateMachines:
-    OrderWorkflowStateMachine:
-      name: pardos-order-workflow-${self:provider.stage}
-      events:
-        - eventBridge:
-            eventBus: ${self:provider.environment.EVENTS_BUS_NAME}
-            pattern:
-              source:
-                - "pardos.orders"
-              detail-type:
-                - "order.created"
-      definition:
-        Comment: "Workflow simple de pedido Pardos Chicken"
-        StartAt: MarkReceived
-        States:
-          MarkReceived:
-            Type: Pass
-            Next: WaitCooking
-          WaitCooking:
-            Type: Wait
-            Seconds: 60
-            Next: WaitPacking
-          WaitPacking:
-            Type: Wait
-            Seconds: 60
-            Next: WaitDelivering
-          WaitDelivering:
-            Type: Wait
-            Seconds: 60
-            Next: Done
-          Done:
-            Type: Succeed
-
 resources:
   Resources:
+    # ---------- DynamoDB ----------
     TenantsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.TENANTS_TABLE}
-        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: tenant_id
             AttributeType: S
         KeySchema:
           - AttributeName: tenant_id
             KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 
     MenuTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.MENU_TABLE}
-        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: tenant_id
             AttributeType: S
@@ -151,12 +113,12 @@ resources:
             KeyType: HASH
           - AttributeName: product_id
             KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
 
     OrdersTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.ORDERS_TABLE}
-        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: tenant_id
             AttributeType: S
@@ -167,12 +129,12 @@ resources:
             KeyType: HASH
           - AttributeName: order_id
             KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
 
     OrderEventsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.ORDER_EVENTS_TABLE}
-        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: order_id
             AttributeType: S
@@ -183,13 +145,53 @@ resources:
             KeyType: HASH
           - AttributeName: ts
             KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
 
-    EventBus:
+    # ---------- EventBridge ----------
+    OrdersEventBus:
       Type: AWS::Events::EventBus
       Properties:
         Name: ${self:provider.environment.EVENTS_BUS_NAME}
 
+    # ---------- S3 para reportes ----------
     ReportsBucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.REPORTS_BUCKET}
+
+    # ---------- Step Functions (workflow simple) ----------
+    OrderWorkflowStateMachine:
+      Type: AWS::StepFunctions::StateMachine
+      Properties:
+        StateMachineName: ${sls:stage}-pardos-order-workflow
+        StateMachineType: STANDARD
+        RoleArn: arn:aws:iam::663025695161:role/LabRole
+        DefinitionString: |
+          {
+            "Comment": "Simple workflow de pedidos Pardos Chicken",
+            "StartAt": "MarkReceived",
+            "States": {
+              "MarkReceived": {
+                "Type": "Pass",
+                "Next": "WaitCooking"
+              },
+              "WaitCooking": {
+                "Type": "Wait",
+                "Seconds": 60,
+                "Next": "WaitPacking"
+              },
+              "WaitPacking": {
+                "Type": "Wait",
+                "Seconds": 60,
+                "Next": "WaitDelivering"
+              },
+              "WaitDelivering": {
+                "Type": "Wait",
+                "Seconds": 60,
+                "Next": "Done"
+              },
+              "Done": {
+                "Type": "Succeed"
+              }
+            }
+          }
