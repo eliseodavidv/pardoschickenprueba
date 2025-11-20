@@ -1,5 +1,5 @@
+org: brunogarcial
 service: pardos-orders
-frameworkVersion: "3"
 
 provider:
   name: aws
@@ -17,7 +17,6 @@ provider:
     REPORTS_BUCKET: pardos-orders-reports-${self:provider.stage}
 
 plugins:
-  - serverless-python-requirements
   - serverless-step-functions
 
 package:
