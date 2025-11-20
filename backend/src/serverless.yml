@@ -16,9 +16,6 @@ provider:
     EVENTS_BUS_NAME: pardos-orders-bus-${self:provider.stage}
     REPORTS_BUCKET: pardos-orders-reports-${self:provider.stage}
 
-plugins:
-  - serverless-step-functions
-
 package:
   patterns:
     - "!node_modules/**"
