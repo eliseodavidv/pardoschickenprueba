@@ -1,5 +1,5 @@
 import json
-from src.common.db import tenants_table
+from common.db import tenants_table
 
 # Para el curso, devolvemos el tenant Pardos, pero la tabla permite más.
 def handler(event, context):

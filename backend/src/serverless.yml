@@ -19,21 +19,21 @@ provider:
 functions:
   # -------- MS TENANTS & MENU --------
   getTenants:
-    handler: src/ms_tenants_menu/get_tenants.handler
+    handler: ms_tenants_menu/get_tenants.handler
     events:
       - httpApi:
           path: /tenants
           method: get
 
   getMenu:
-    handler: src/ms_tenants_menu/get_menu.handler
+    handler: ms_tenants_menu/get_menu.handler
     events:
       - httpApi:
           path: /tenants/{tenantId}/menu
           method: get
 
   putMenuItem:
-    handler: src/ms_tenants_menu/put_menu_item.handler
+    handler: ms_tenants_menu/put_menu_item.handler
     events:
       - httpApi:
           path: /tenants/{tenantId}/menu
@@ -41,21 +41,21 @@ functions:
 
   # -------- MS ORDERS (CLIENTE) --------
   createOrder:
-    handler: src/ms_orders/create_order.handler
+    handler: ms_orders/create_order.handler
     events:
       - httpApi:
           path: /tenants/{tenantId}/orders
           method: post
 
   getOrder:
-    handler: src/ms_orders/get_order.handler
+    handler: ms_orders/get_order.handler
     events:
       - httpApi:
           path: /tenants/{tenantId}/orders/{orderId}
           method: get
 
   listOrders:
-    handler: src/ms_orders/list_orders.handler
+    handler: ms_orders/list_orders.handler
     events:
       - httpApi:
           path: /tenants/{tenantId}/orders
@@ -63,14 +63,14 @@ functions:
 
   # -------- MS WORKFLOW (RESTAURANTE) --------
   updateOrderStep:
-    handler: src/ms_workflow/update_order_step.handler
+    handler: ms_workflow/update_order_step.handler
     events:
       - httpApi:
           path: /tenants/{tenantId}/orders/{orderId}/step
           method: post
 
   getDashboardSummary:
-    handler: src/ms_workflow/get_dashboard_summary.handler
+    handler: ms_workflow/get_dashboard_summary.handler
     events:
       - httpApi:
           path: /tenants/{tenantId}/dashboard
@@ -78,7 +78,7 @@ functions:
 
   # Exportador diario a S3 (reportes)
   exportDailyReport:
-    handler: src/ms_workflow/export_daily_report.handler
+    handler: ms_workflow/export_daily_report.handler
     events:
       - schedule:
           rate: rate(1 day)

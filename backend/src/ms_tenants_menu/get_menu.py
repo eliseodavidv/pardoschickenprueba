@@ -1,6 +1,6 @@
 import json
 from boto3.dynamodb.conditions import Key
-from src.common.db import menu_table
+from common.db import menu_table
 
 def handler(event, context):
     path_params = event.get("pathParameters") or {}

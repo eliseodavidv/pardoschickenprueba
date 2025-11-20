@@ -2,8 +2,8 @@ import json
 import uuid
 from datetime import datetime, timezone
 
-from src.common.db import orders_table, order_events_table
-from src.common.events import publish_event
+from common.db import orders_table, order_events_table
+from common.events import publish_event
 
 def handler(event, context):
     body = json.loads(event.get("body") or "{}")

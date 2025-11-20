@@ -1,8 +1,8 @@
 import json
 from datetime import datetime, timezone
 
-from src.common.db import orders_table, order_events_table
-from src.common.events import publish_event
+from common.db import orders_table, order_events_table
+from common.events import publish_event
 
 VALID_STATES = ["RECEIVED", "COOKING", "PACKING", "DELIVERING", "DELIVERED"]
 
