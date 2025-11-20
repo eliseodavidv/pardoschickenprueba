@@ -1,6 +1,7 @@
 import json
 import uuid
 from common.db import menu_table
+from decimal import Decimal
 
 def handler(event, context):
     path_params = event.get("pathParameters") or {}
