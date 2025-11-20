@@ -1,5 +1,6 @@
 import json
 from common.db import orders_table
+from decimal import Decimal
 
 def handler(event, context):
     path_params = event.get("pathParameters") or {}
