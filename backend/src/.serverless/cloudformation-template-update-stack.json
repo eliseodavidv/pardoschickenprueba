@@ -1,0 +1,1575 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "GetTenantsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-getTenants"
+      }
+    },
+    "GetMenuLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-getMenu"
+      }
+    },
+    "PutMenuItemLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-putMenuItem"
+      }
+    },
+    "CreateOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-createOrder"
+      }
+    },
+    "GetOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-getOrder"
+      }
+    },
+    "ListOrdersLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-listOrders"
+      }
+    },
+    "GetOrderMetricsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-getOrderMetrics"
+      }
+    },
+    "UpdateOrderStepLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-updateOrderStep"
+      }
+    },
+    "GetDashboardSummaryLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-getDashboardSummary"
+      }
+    },
+    "CheckOrderStatusLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-checkOrderStatus"
+      }
+    },
+    "CalculateOrderMetricsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/pardos-orders-dev-calculateOrderMetrics"
+      }
+    },
+    "GetTenantsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_tenants_menu/get_tenants.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-getTenants",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "GetTenantsLogGroup"
+      ]
+    },
+    "GetMenuLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_tenants_menu/get_menu.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-getMenu",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "GetMenuLogGroup"
+      ]
+    },
+    "PutMenuItemLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_tenants_menu/put_menu_item.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-putMenuItem",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "PutMenuItemLogGroup"
+      ]
+    },
+    "CreateOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_orders/create_order.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-createOrder",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "CreateOrderLogGroup"
+      ]
+    },
+    "GetOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_orders/get_order.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-getOrder",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "GetOrderLogGroup"
+      ]
+    },
+    "ListOrdersLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_orders/list_orders.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-listOrders",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "ListOrdersLogGroup"
+      ]
+    },
+    "GetOrderMetricsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_orders/get_order_metrics.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-getOrderMetrics",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "GetOrderMetricsLogGroup"
+      ]
+    },
+    "UpdateOrderStepLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_workflow/update_order_step.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-updateOrderStep",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "UpdateOrderStepLogGroup"
+      ]
+    },
+    "GetDashboardSummaryLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_workflow/get_dashboard_summary.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-getDashboardSummary",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "GetDashboardSummaryLogGroup"
+      ]
+    },
+    "CheckOrderStatusLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_workflow/check_order_status.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-checkOrderStatus",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "CheckOrderStatusLogGroup"
+      ]
+    },
+    "CalculateOrderMetricsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+        },
+        "Handler": "ms_workflow/calculate_order_metrics.handler",
+        "Runtime": "python3.13",
+        "FunctionName": "pardos-orders-dev-calculateOrderMetrics",
+        "MemorySize": 1024,
+        "Timeout": 20,
+        "Environment": {
+          "Variables": {
+            "TENANTS_TABLE": "dev-Tenants",
+            "MENU_TABLE": "dev-MenuItems",
+            "ORDERS_TABLE": "dev-Orders",
+            "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+            "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+            "REPORTS_BUCKET": "dev-pardos-orders-reports"
+          }
+        },
+        "Role": "arn:aws:iam::647796053987:role/LabRole"
+      },
+      "DependsOn": [
+        "CalculateOrderMetricsLogGroup"
+      ]
+    },
+    "GetTenantsLambdaVersionj3AQRWGL9D7tL35wRBmfkN80BPrzLs3BembpCTn9yvY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetTenantsLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "GetMenuLambdaVersionjT91CVpmCAus4QifrRJT9XFlJ71l9R64xF99XpRTA8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetMenuLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "PutMenuItemLambdaVersionHP8e7ZRXAQwBowWh8ta5BBFzr2nHeybYlm18aKJQvY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "PutMenuItemLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "CreateOrderLambdaVersiond8c3MKW8lZlcWmNT0gLRHKvfNaSRYSyw3MZo4ATYfI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CreateOrderLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "GetOrderLambdaVersion5Aq5LAuMf9qUZSIYgAmFo0jqG0PJzXW1mTpwRf9ty7E": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetOrderLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "ListOrdersLambdaVersionHV8coM9X7t9UgHtdvNDc9pt2LVUTj8uUmJ5AUEYmk": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ListOrdersLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "GetOrderMetricsLambdaVersionHm5GKwttJotUeNg4VqB9vsJWyOhUyBUSiXaIGxQ1j0s": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetOrderMetricsLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "UpdateOrderStepLambdaVersionWGJ8cqUE3y9kbsPAxE2ITuZKqFDLqY7xtGyds9o0k": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UpdateOrderStepLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "GetDashboardSummaryLambdaVersiondAXG5wSpitoz5elXz3siCYWs80raPKMy8pgOgdwGHg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetDashboardSummaryLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "CheckOrderStatusLambdaVersionesTrdoFCWbGtnBEqEtoJkr3gazhugyF1qZJJbuqM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CheckOrderStatusLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "CalculateOrderMetricsLambdaVersionra4qPmugJHk5JPjKFthH1q4ug3BmjjNMzrRp9gkI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CalculateOrderMetricsLambdaFunction"
+        },
+        "CodeSha256": "6fJrFRgI4yy3ToZ/MT+LCmw+L9yN5ctbsa+LuRPiyz8="
+      }
+    },
+    "HttpApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "dev-pardos-orders",
+        "ProtocolType": "HTTP"
+      }
+    },
+    "HttpApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true,
+        "DefaultRouteSettings": {
+          "DetailedMetricsEnabled": false
+        }
+      }
+    },
+    "GetTenantsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetTenantsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetTenants": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetTenantsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetTenants": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /tenants",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetTenants"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetTenants"
+    },
+    "GetMenuLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetMenuLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetMenu": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetMenuLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetTenantsTenantidVarMenu": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /tenants/{tenantId}/menu",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetMenu"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetMenu"
+    },
+    "PutMenuItemLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "PutMenuItemLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationPutMenuItem": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "PutMenuItemLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostTenantsTenantidVarMenu": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /tenants/{tenantId}/menu",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationPutMenuItem"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationPutMenuItem"
+    },
+    "CreateOrderLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CreateOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationCreateOrder": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "CreateOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostTenantsTenantidVarOrders": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /tenants/{tenantId}/orders",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationCreateOrder"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationCreateOrder"
+    },
+    "GetOrderLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetOrder": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetTenantsTenantidVarOrdersOrderidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /tenants/{tenantId}/orders/{orderId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetOrder"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetOrder"
+    },
+    "ListOrdersLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ListOrdersLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationListOrders": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "ListOrdersLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetTenantsTenantidVarOrders": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /tenants/{tenantId}/orders",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationListOrders"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationListOrders"
+    },
+    "GetOrderMetricsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetOrderMetricsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetOrderMetrics": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetOrderMetricsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetTenantsTenantidVarOrdersOrderidVarMetrics": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /tenants/{tenantId}/orders/{orderId}/metrics",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetOrderMetrics"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetOrderMetrics"
+    },
+    "UpdateOrderStepLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UpdateOrderStepLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUpdateOrderStep": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UpdateOrderStepLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostTenantsTenantidVarOrdersOrderidVarStep": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /tenants/{tenantId}/orders/{orderId}/step",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUpdateOrderStep"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUpdateOrderStep"
+    },
+    "GetDashboardSummaryLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetDashboardSummaryLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetDashboardSummary": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetDashboardSummaryLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetTenantsTenantidVarDashboard": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /tenants/{tenantId}/dashboard",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetDashboardSummary"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetDashboardSummary"
+    },
+    "TenantsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "dev-Tenants",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "tenant_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "tenant_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "MenuTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "dev-MenuItems",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "tenant_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "product_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "tenant_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "product_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "OrdersTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "dev-Orders",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "tenant_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "order_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "tenant_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "order_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "OrderEventsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "dev-OrderEvents",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "order_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "ts",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "order_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "ts",
+            "KeyType": "RANGE"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "OrdersEventBus": {
+      "Type": "AWS::Events::EventBus",
+      "Properties": {
+        "Name": "dev-pardos-orders-bus"
+      }
+    },
+    "OrderCreatedRule": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Name": "dev-order-created-trigger",
+        "Description": "Inicia el workflow de Step Functions cuando se crea una nueva orden",
+        "EventBusName": {
+          "Ref": "OrdersEventBus"
+        },
+        "EventPattern": {
+          "source": [
+            "pardos.orders"
+          ],
+          "detail-type": [
+            "order.created"
+          ]
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "OrderWorkflowStateMachine",
+                "Arn"
+              ]
+            },
+            "RoleArn": "arn:aws:iam::647796053987:role/LabRole",
+            "Id": "OrderWorkflowTarget",
+            "InputTransformer": {
+              "InputPathsMap": {
+                "tenant_id": "$.detail.tenant_id",
+                "order_id": "$.detail.order_id",
+                "status": "$.detail.status"
+              },
+              "InputTemplate": "{\n  \"tenant_id\": <tenant_id>,\n  \"order_id\": <order_id>,\n  \"status\": <status>\n}\n"
+            }
+          }
+        ]
+      }
+    },
+    "OrderWorkflowStateMachine": {
+      "Type": "AWS::StepFunctions::StateMachine",
+      "Properties": {
+        "StateMachineName": "dev-pardos-order-workflow",
+        "StateMachineType": "STANDARD",
+        "RoleArn": "arn:aws:iam::647796053987:role/LabRole",
+        "DefinitionString": {
+          "Fn::Sub": "{\n  \"Comment\": \"Workflow de gestión de pedidos Pardos Chicken con monitoreo de tiempos\",\n  \"StartAt\": \"LogOrderReceived\",\n  \"States\": {\n    \"LogOrderReceived\": {\n      \"Type\": \"Pass\",\n      \"Comment\": \"Registrar que la orden fue recibida\",\n      \"Parameters\": {\n        \"tenant_id.$\": \"$.tenant_id\",\n        \"order_id.$\": \"$.order_id\",\n        \"status\": \"RECEIVED\",\n        \"timestamp.$\": \"$$.State.EnteredTime\"\n      },\n      \"Next\": \"CheckInitialStatus\"\n    },\n    \"CheckInitialStatus\": {\n      \"Type\": \"Task\",\n      \"Comment\": \"Verificar estado inicial de la orden\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"${CheckOrderStatusLambdaFunction}\",\n        \"Payload\": {\n          \"tenant_id.$\": \"$.tenant_id\",\n          \"order_id.$\": \"$.order_id\"\n        }\n      },\n      \"ResultPath\": \"$.checkResult\",\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\"States.TaskFailed\"],\n          \"IntervalSeconds\": 2,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Catch\": [\n        {\n          \"ErrorEquals\": [\"States.ALL\"],\n          \"Next\": \"HandleError\",\n          \"ResultPath\": \"$.error\"\n        }\n      ],\n      \"Next\": \"WaitForCooking\"\n    },\n    \"WaitForCooking\": {\n      \"Type\": \"Wait\",\n      \"Comment\": \"Esperar mientras el personal cocina (workflow manual)\",\n      \"Seconds\": 300,\n      \"Next\": \"CheckCookingStatus\"\n    },\n    \"CheckCookingStatus\": {\n      \"Type\": \"Task\",\n      \"Comment\": \"Verificar si pasó a fase de cocina\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"${CheckOrderStatusLambdaFunction}\",\n        \"Payload\": {\n          \"tenant_id.$\": \"$.tenant_id\",\n          \"order_id.$\": \"$.order_id\"\n        }\n      },\n      \"ResultPath\": \"$.checkResult\",\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\"States.TaskFailed\"],\n          \"IntervalSeconds\": 2,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Next\": \"IsCooking\"\n    },\n    \"IsCooking\": {\n      \"Type\": \"Choice\",\n      \"Comment\": \"Verificar si ya está en cocina o más adelante\",\n      \"Choices\": [\n        {\n          \"Variable\": \"$.checkResult.Payload.current_status\",\n          \"StringEquals\": \"RECEIVED\",\n          \"Next\": \"WaitForCooking\"\n        },\n        {\n          \"Or\": [\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"COOKING\"\n            },\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"PACKING\"\n            },\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"DELIVERING\"\n            },\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"DELIVERED\"\n            }\n          ],\n          \"Next\": \"WaitForPacking\"\n        }\n      ],\n      \"Default\": \"WaitForCooking\"\n    },\n    \"WaitForPacking\": {\n      \"Type\": \"Wait\",\n      \"Comment\": \"Esperar mientras el personal empaca\",\n      \"Seconds\": 180,\n      \"Next\": \"CheckPackingStatus\"\n    },\n    \"CheckPackingStatus\": {\n      \"Type\": \"Task\",\n      \"Comment\": \"Verificar si pasó a fase de empaque\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"${CheckOrderStatusLambdaFunction}\",\n        \"Payload\": {\n          \"tenant_id.$\": \"$.tenant_id\",\n          \"order_id.$\": \"$.order_id\"\n        }\n      },\n      \"ResultPath\": \"$.checkResult\",\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\"States.TaskFailed\"],\n          \"IntervalSeconds\": 2,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Next\": \"IsPacking\"\n    },\n    \"IsPacking\": {\n      \"Type\": \"Choice\",\n      \"Comment\": \"Verificar si ya está en empaque o más adelante\",\n      \"Choices\": [\n        {\n          \"Or\": [\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"RECEIVED\"\n            },\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"COOKING\"\n            }\n          ],\n          \"Next\": \"WaitForPacking\"\n        },\n        {\n          \"Or\": [\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"PACKING\"\n            },\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"DELIVERING\"\n            },\n            {\n              \"Variable\": \"$.checkResult.Payload.current_status\",\n              \"StringEquals\": \"DELIVERED\"\n            }\n          ],\n          \"Next\": \"WaitForDelivery\"\n        }\n      ],\n      \"Default\": \"WaitForPacking\"\n    },\n    \"WaitForDelivery\": {\n      \"Type\": \"Wait\",\n      \"Comment\": \"Esperar mientras el repartidor entrega\",\n      \"Seconds\": 600,\n      \"Next\": \"CheckDeliveryStatus\"\n    },\n    \"CheckDeliveryStatus\": {\n      \"Type\": \"Task\",\n      \"Comment\": \"Verificar si está siendo entregado o ya entregado\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"${CheckOrderStatusLambdaFunction}\",\n        \"Payload\": {\n          \"tenant_id.$\": \"$.tenant_id\",\n          \"order_id.$\": \"$.order_id\"\n        }\n      },\n      \"ResultPath\": \"$.checkResult\",\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\"States.TaskFailed\"],\n          \"IntervalSeconds\": 2,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Next\": \"IsDelivered\"\n    },\n    \"IsDelivered\": {\n      \"Type\": \"Choice\",\n      \"Comment\": \"Verificar si ya fue entregado\",\n      \"Choices\": [\n        {\n          \"Variable\": \"$.checkResult.Payload.current_status\",\n          \"StringEquals\": \"DELIVERED\",\n          \"Next\": \"CalculateFinalMetrics\"\n        }\n      ],\n      \"Default\": \"WaitForDelivery\"\n    },\n    \"CalculateFinalMetrics\": {\n      \"Type\": \"Task\",\n      \"Comment\": \"Calcular métricas finales de tiempo de la orden\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"${CalculateOrderMetricsLambdaFunction}\",\n        \"Payload\": {\n          \"order_id.$\": \"$.order_id\"\n        }\n      },\n      \"ResultPath\": \"$.metricsResult\",\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\"States.TaskFailed\"],\n          \"IntervalSeconds\": 2,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Next\": \"WorkflowCompleted\"\n    },\n    \"WorkflowCompleted\": {\n      \"Type\": \"Succeed\",\n      \"Comment\": \"Workflow completado exitosamente\"\n    },\n    \"HandleError\": {\n      \"Type\": \"Pass\",\n      \"Comment\": \"Manejar errores del workflow\",\n      \"Parameters\": {\n        \"error.$\": \"$.error\",\n        \"order_id.$\": \"$.order_id\"\n      },\n      \"Next\": \"WorkflowFailed\"\n    },\n    \"WorkflowFailed\": {\n      \"Type\": \"Fail\",\n      \"Comment\": \"Workflow falló\",\n      \"Error\": \"WorkflowExecutionError\",\n      \"Cause\": \"Error durante la ejecución del workflow de pedidos\"\n    }\n  }\n}\n"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "GetTenantsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetTenantsLambdaVersionj3AQRWGL9D7tL35wRBmfkN80BPrzLs3BembpCTn9yvY"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-GetTenantsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetMenuLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetMenuLambdaVersionjT91CVpmCAus4QifrRJT9XFlJ71l9R64xF99XpRTA8"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-GetMenuLambdaFunctionQualifiedArn"
+      }
+    },
+    "PutMenuItemLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "PutMenuItemLambdaVersionHP8e7ZRXAQwBowWh8ta5BBFzr2nHeybYlm18aKJQvY"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-PutMenuItemLambdaFunctionQualifiedArn"
+      }
+    },
+    "CreateOrderLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CreateOrderLambdaVersiond8c3MKW8lZlcWmNT0gLRHKvfNaSRYSyw3MZo4ATYfI"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-CreateOrderLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetOrderLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetOrderLambdaVersion5Aq5LAuMf9qUZSIYgAmFo0jqG0PJzXW1mTpwRf9ty7E"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-GetOrderLambdaFunctionQualifiedArn"
+      }
+    },
+    "ListOrdersLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ListOrdersLambdaVersionHV8coM9X7t9UgHtdvNDc9pt2LVUTj8uUmJ5AUEYmk"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-ListOrdersLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetOrderMetricsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetOrderMetricsLambdaVersionHm5GKwttJotUeNg4VqB9vsJWyOhUyBUSiXaIGxQ1j0s"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-GetOrderMetricsLambdaFunctionQualifiedArn"
+      }
+    },
+    "UpdateOrderStepLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UpdateOrderStepLambdaVersionWGJ8cqUE3y9kbsPAxE2ITuZKqFDLqY7xtGyds9o0k"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-UpdateOrderStepLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetDashboardSummaryLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetDashboardSummaryLambdaVersiondAXG5wSpitoz5elXz3siCYWs80raPKMy8pgOgdwGHg"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-GetDashboardSummaryLambdaFunctionQualifiedArn"
+      }
+    },
+    "CheckOrderStatusLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CheckOrderStatusLambdaVersionesTrdoFCWbGtnBEqEtoJkr3gazhugyF1qZJJbuqM"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-CheckOrderStatusLambdaFunctionQualifiedArn"
+      }
+    },
+    "CalculateOrderMetricsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CalculateOrderMetricsLambdaVersionra4qPmugJHk5JPjKFthH1q4ug3BmjjNMzrRp9gkI"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-CalculateOrderMetricsLambdaFunctionQualifiedArn"
+      }
+    },
+    "HttpApiId": {
+      "Description": "Id of the HTTP API",
+      "Value": {
+        "Ref": "HttpApi"
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-HttpApiId"
+      }
+    },
+    "HttpApiUrl": {
+      "Description": "URL of the HTTP API",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "HttpApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            }
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-pardos-orders-dev-HttpApiUrl"
+      }
+    }
+  }
+}
