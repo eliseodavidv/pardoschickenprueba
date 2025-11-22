@@ -20,6 +20,9 @@
         "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
         "REPORTS_BUCKET": "dev-pardos-orders-reports"
       },
+      "httpApi": {
+        "cors": true
+      },
       "stage": "dev",
       "region": "us-east-1",
       "versionFunctions": true,
@@ -169,7 +172,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_tenants_menu/get_tenants.handler",
               "Runtime": "python3.13",
@@ -199,7 +202,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_tenants_menu/get_menu.handler",
               "Runtime": "python3.13",
@@ -229,7 +232,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_tenants_menu/put_menu_item.handler",
               "Runtime": "python3.13",
@@ -259,7 +262,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/create_order.handler",
               "Runtime": "python3.13",
@@ -289,7 +292,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/get_order.handler",
               "Runtime": "python3.13",
@@ -319,7 +322,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/list_orders.handler",
               "Runtime": "python3.13",
@@ -349,7 +352,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/get_order_metrics.handler",
               "Runtime": "python3.13",
@@ -379,7 +382,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/update_order_step.handler",
               "Runtime": "python3.13",
@@ -409,7 +412,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/get_dashboard_summary.handler",
               "Runtime": "python3.13",
@@ -439,7 +442,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/check_order_status.handler",
               "Runtime": "python3.13",
@@ -469,7 +472,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/calculate_order_metrics.handler",
               "Runtime": "python3.13",
@@ -606,7 +609,26 @@
             "Type": "AWS::ApiGatewayV2::Api",
             "Properties": {
               "Name": "dev-pardos-orders",
-              "ProtocolType": "HTTP"
+              "ProtocolType": "HTTP",
+              "CorsConfiguration": {
+                "AllowHeaders": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "AllowMethods": [
+                  "OPTIONS",
+                  "GET",
+                  "POST"
+                ],
+                "AllowOrigins": [
+                  "*"
+                ]
+              }
             }
           },
           "HttpApiStage": {
@@ -2049,7 +2071,7 @@
     "artifact": "C:\\Users\\user\\pardoschickenprueba\\backend\\src\\.serverless\\pardos-orders.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/pardos-orders/dev/1763851151199-2025-11-22T22:39:11.199Z",
+    "artifactDirectoryName": "serverless/pardos-orders/dev/1763852787868-2025-11-22T23:06:27.868Z",
     "artifact": "pardos-orders.zip"
   }
 }
