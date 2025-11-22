@@ -61,6 +61,13 @@ functions:
           path: /tenants/{tenantId}/orders
           method: get
 
+  getOrderMetrics:
+    handler: ms_orders/get_order_metrics.handler
+    events:
+      - httpApi:
+          path: /tenants/{tenantId}/orders/{orderId}/metrics
+          method: get
+
   # -------- MS WORKFLOW (RESTAURANTE) --------
   updateOrderStep:
     handler: ms_workflow/update_order_step.handler
@@ -83,6 +90,15 @@ functions:
       - schedule:
           rate: rate(1 day)
           enabled: true
+
+  # Funciones usadas por Step Functions
+  checkOrderStatus:
+    handler: ms_workflow/check_order_status.handler
+    environment:
+      STATE_MACHINE_ARN: !GetAtt OrderWorkflowStateMachine.Arn
+
+  calculateOrderMetrics:
+    handler: ms_workflow/calculate_order_metrics.handler
 
 resources:
   Resources:
@@ -153,45 +169,299 @@ resources:
       Properties:
         Name: ${self:provider.environment.EVENTS_BUS_NAME}
 
+    # Regla para iniciar Step Functions cuando se crea una orden
+    OrderCreatedRule:
+      Type: AWS::Events::Rule
+      Properties:
+        Name: ${sls:stage}-order-created-trigger
+        Description: "Inicia el workflow de Step Functions cuando se crea una nueva orden"
+        EventBusName: !Ref OrdersEventBus
+        EventPattern:
+          source:
+            - pardos.orders
+          detail-type:
+            - order.created
+        State: ENABLED
+        Targets:
+          - Arn: !GetAtt OrderWorkflowStateMachine.Arn
+            RoleArn: arn:aws:iam::663025695161:role/LabRole
+            Id: OrderWorkflowTarget
+            InputTransformer:
+              InputPathsMap:
+                tenant_id: "$.detail.tenant_id"
+                order_id: "$.detail.order_id"
+                status: "$.detail.status"
+              InputTemplate: |
+                {
+                  "tenant_id": <tenant_id>,
+                  "order_id": <order_id>,
+                  "status": <status>
+                }
+
     # ---------- S3 para reportes ----------
     ReportsBucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.REPORTS_BUCKET}
 
-    # ---------- Step Functions (workflow simple) ----------
+    # ---------- Step Functions (workflow real integrado) ----------
     OrderWorkflowStateMachine:
       Type: AWS::StepFunctions::StateMachine
       Properties:
         StateMachineName: ${sls:stage}-pardos-order-workflow
         StateMachineType: STANDARD
         RoleArn: arn:aws:iam::663025695161:role/LabRole
-        DefinitionString: |
-          {
-            "Comment": "Simple workflow de pedidos Pardos Chicken",
-            "StartAt": "MarkReceived",
-            "States": {
-              "MarkReceived": {
-                "Type": "Pass",
-                "Next": "WaitCooking"
-              },
-              "WaitCooking": {
-                "Type": "Wait",
-                "Seconds": 60,
-                "Next": "WaitPacking"
-              },
-              "WaitPacking": {
-                "Type": "Wait",
-                "Seconds": 60,
-                "Next": "WaitDelivering"
-              },
-              "WaitDelivering": {
-                "Type": "Wait",
-                "Seconds": 60,
-                "Next": "Done"
-              },
-              "Done": {
-                "Type": "Succeed"
+        DefinitionString:
+          Fn::Sub: |
+            {
+              "Comment": "Workflow de gestión de pedidos Pardos Chicken con monitoreo de tiempos",
+              "StartAt": "LogOrderReceived",
+              "States": {
+                "LogOrderReceived": {
+                  "Type": "Pass",
+                  "Comment": "Registrar que la orden fue recibida",
+                  "Parameters": {
+                    "tenant_id.$": "$.tenant_id",
+                    "order_id.$": "$.order_id",
+                    "status": "RECEIVED",
+                    "timestamp.$": "$$.State.EnteredTime"
+                  },
+                  "Next": "CheckInitialStatus"
+                },
+                "CheckInitialStatus": {
+                  "Type": "Task",
+                  "Comment": "Verificar estado inicial de la orden",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "Parameters": {
+                    "FunctionName": "${CheckOrderStatusLambdaFunction}",
+                    "Payload": {
+                      "tenant_id.$": "$.tenant_id",
+                      "order_id.$": "$.order_id"
+                    }
+                  },
+                  "ResultPath": "$.checkResult",
+                  "Retry": [
+                    {
+                      "ErrorEquals": ["States.TaskFailed"],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 3,
+                      "BackoffRate": 2.0
+                    }
+                  ],
+                  "Catch": [
+                    {
+                      "ErrorEquals": ["States.ALL"],
+                      "Next": "HandleError",
+                      "ResultPath": "$.error"
+                    }
+                  ],
+                  "Next": "WaitForCooking"
+                },
+                "WaitForCooking": {
+                  "Type": "Wait",
+                  "Comment": "Esperar mientras el personal cocina (workflow manual)",
+                  "Seconds": 300,
+                  "Next": "CheckCookingStatus"
+                },
+                "CheckCookingStatus": {
+                  "Type": "Task",
+                  "Comment": "Verificar si pasó a fase de cocina",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "Parameters": {
+                    "FunctionName": "${CheckOrderStatusLambdaFunction}",
+                    "Payload": {
+                      "tenant_id.$": "$.tenant_id",
+                      "order_id.$": "$.order_id"
+                    }
+                  },
+                  "ResultPath": "$.checkResult",
+                  "Retry": [
+                    {
+                      "ErrorEquals": ["States.TaskFailed"],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 3,
+                      "BackoffRate": 2.0
+                    }
+                  ],
+                  "Next": "IsCooking"
+                },
+                "IsCooking": {
+                  "Type": "Choice",
+                  "Comment": "Verificar si ya está en cocina o más adelante",
+                  "Choices": [
+                    {
+                      "Variable": "$.checkResult.Payload.current_status",
+                      "StringEquals": "RECEIVED",
+                      "Next": "WaitForCooking"
+                    },
+                    {
+                      "Or": [
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "COOKING"
+                        },
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "PACKING"
+                        },
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "DELIVERING"
+                        },
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "DELIVERED"
+                        }
+                      ],
+                      "Next": "WaitForPacking"
+                    }
+                  ],
+                  "Default": "WaitForCooking"
+                },
+                "WaitForPacking": {
+                  "Type": "Wait",
+                  "Comment": "Esperar mientras el personal empaca",
+                  "Seconds": 180,
+                  "Next": "CheckPackingStatus"
+                },
+                "CheckPackingStatus": {
+                  "Type": "Task",
+                  "Comment": "Verificar si pasó a fase de empaque",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "Parameters": {
+                    "FunctionName": "${CheckOrderStatusLambdaFunction}",
+                    "Payload": {
+                      "tenant_id.$": "$.tenant_id",
+                      "order_id.$": "$.order_id"
+                    }
+                  },
+                  "ResultPath": "$.checkResult",
+                  "Retry": [
+                    {
+                      "ErrorEquals": ["States.TaskFailed"],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 3,
+                      "BackoffRate": 2.0
+                    }
+                  ],
+                  "Next": "IsPacking"
+                },
+                "IsPacking": {
+                  "Type": "Choice",
+                  "Comment": "Verificar si ya está en empaque o más adelante",
+                  "Choices": [
+                    {
+                      "Or": [
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "RECEIVED"
+                        },
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "COOKING"
+                        }
+                      ],
+                      "Next": "WaitForPacking"
+                    },
+                    {
+                      "Or": [
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "PACKING"
+                        },
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "DELIVERING"
+                        },
+                        {
+                          "Variable": "$.checkResult.Payload.current_status",
+                          "StringEquals": "DELIVERED"
+                        }
+                      ],
+                      "Next": "WaitForDelivery"
+                    }
+                  ],
+                  "Default": "WaitForPacking"
+                },
+                "WaitForDelivery": {
+                  "Type": "Wait",
+                  "Comment": "Esperar mientras el repartidor entrega",
+                  "Seconds": 600,
+                  "Next": "CheckDeliveryStatus"
+                },
+                "CheckDeliveryStatus": {
+                  "Type": "Task",
+                  "Comment": "Verificar si está siendo entregado o ya entregado",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "Parameters": {
+                    "FunctionName": "${CheckOrderStatusLambdaFunction}",
+                    "Payload": {
+                      "tenant_id.$": "$.tenant_id",
+                      "order_id.$": "$.order_id"
+                    }
+                  },
+                  "ResultPath": "$.checkResult",
+                  "Retry": [
+                    {
+                      "ErrorEquals": ["States.TaskFailed"],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 3,
+                      "BackoffRate": 2.0
+                    }
+                  ],
+                  "Next": "IsDelivered"
+                },
+                "IsDelivered": {
+                  "Type": "Choice",
+                  "Comment": "Verificar si ya fue entregado",
+                  "Choices": [
+                    {
+                      "Variable": "$.checkResult.Payload.current_status",
+                      "StringEquals": "DELIVERED",
+                      "Next": "CalculateFinalMetrics"
+                    }
+                  ],
+                  "Default": "WaitForDelivery"
+                },
+                "CalculateFinalMetrics": {
+                  "Type": "Task",
+                  "Comment": "Calcular métricas finales de tiempo de la orden",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "Parameters": {
+                    "FunctionName": "${CalculateOrderMetricsLambdaFunction}",
+                    "Payload": {
+                      "order_id.$": "$.order_id"
+                    }
+                  },
+                  "ResultPath": "$.metricsResult",
+                  "Retry": [
+                    {
+                      "ErrorEquals": ["States.TaskFailed"],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 3,
+                      "BackoffRate": 2.0
+                    }
+                  ],
+                  "Next": "WorkflowCompleted"
+                },
+                "WorkflowCompleted": {
+                  "Type": "Succeed",
+                  "Comment": "Workflow completado exitosamente"
+                },
+                "HandleError": {
+                  "Type": "Pass",
+                  "Comment": "Manejar errores del workflow",
+                  "Parameters": {
+                    "error.$": "$.error",
+                    "order_id.$": "$.order_id"
+                  },
+                  "Next": "WorkflowFailed"
+                },
+                "WorkflowFailed": {
+                  "Type": "Fail",
+                  "Comment": "Workflow falló",
+                  "Error": "WorkflowExecutionError",
+                  "Cause": "Error durante la ejecución del workflow de pedidos"
+                }
               }
             }
-          }
