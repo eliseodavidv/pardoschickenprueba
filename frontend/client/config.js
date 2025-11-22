@@ -1,7 +1,6 @@
-// Configuración del API Gateway
-// Cambia esta URL por la URL de tu API Gateway después del deployment
+// Configuracion del API Gateway
 const API_CONFIG = {
-    baseURL: 'https://YOUR_API_GATEWAY_URL',  // Reemplazar después de serverless deploy
+    baseURL: 'https://c9sut9oprg.execute-api.us-east-1.amazonaws.com',
     tenantId: 'pardos-chicken'
 };
 
