@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pardos Chicken - Dashboard Restaurante</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍗 Pardos Chicken - Dashboard</h1>
+            <p class="subtitle">Panel de Control del Restaurante</p>
+            <div class="header-stats" id="header-stats">
+                <div class="stat">
+                    <span class="stat-value" id="total-orders">-</span>
+                    <span class="stat-label">Total Pedidos</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="in-progress-orders">-</span>
+                    <span class="stat-label">En Proceso</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="completed-orders">-</span>
+                    <span class="stat-label">Completados</span>
+                </div>
+            </div>
+            <button onclick="refreshDashboard()" class="btn btn-refresh">🔄 Actualizar</button>
+        </header>
+
+        <main>
+            <!-- Dashboard de Métricas -->
+            <section id="metrics-section" class="card">
+                <h2>📊 Métricas de Tiempo Promedio</h2>
+                <div class="metrics-grid" id="metrics-grid">
+                    <div class="metric-card">
+                        <h4>Tiempo Total Promedio</h4>
+                        <div class="value" id="avg-total-time">- min</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Cocina</h4>
+                        <div class="value" id="avg-cooking-time">- min</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Empaque</h4>
+                        <div class="value" id="avg-packing-time">- min</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Entrega</h4>
+                        <div class="value" id="avg-delivery-time">- min</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pedidos por Estado -->
+            <section id="orders-section" class="card">
+                <h2>📦 Pedidos Activos</h2>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('all')">Todos</button>
+                    <button class="tab" onclick="showTab('RECEIVED')">Recibidos</button>
+                    <button class="tab" onclick="showTab('COOKING')">En Cocina</button>
+                    <button class="tab" onclick="showTab('PACKING')">Empacando</button>
+                    <button class="tab" onclick="showTab('DELIVERING')">En Camino</button>
+                </div>
+
+                <div id="orders-container" class="orders-grid">
+                    <p class="loading">Cargando pedidos...</p>
+                </div>
+            </section>
+
+            <!-- Historial Reciente -->
+            <section id="recent-section" class="card">
+                <h2>🕒 Pedidos Recientes (Últimos 10)</h2>
+                <div id="recent-orders" class="timeline">
+                    <p class="loading">Cargando historial...</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Pardos Chicken - Sistema de Gestión de Pedidos</p>
+        </footer>
+    </div>
+
+    <!-- Modal para actualizar estado -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUpdateModal()">&times;</span>
+            <h2>Actualizar Estado del Pedido</h2>
+            <div id="modal-order-info"></div>
+            <form id="update-form">
+                <div class="form-group">
+                    <label for="new_status">Nuevo Estado:</label>
+                    <select id="new_status" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="COOKING">En Cocina</option>
+                        <option value="PACKING">Empacando</option>
+                        <option value="DELIVERING">En Camino</option>
+                        <option value="DELIVERED">Entregado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="attended_by">Atendido por:</label>
+                    <input type="text" id="attended_by" required placeholder="Nombre del empleado">
+                </div>
+                <div class="form-group">
+                    <label for="role">Rol:</label>
+                    <select id="role" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="KITCHEN_STAFF">Cocinero</option>
+                        <option value="PACKER">Despachador</option>
+                        <option value="DELIVERY_DRIVER">Repartidor</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
