@@ -7,7 +7,7 @@ provider:
   memorySize: 1024
   timeout: 20
   iam:
-    role: arn:aws:iam::663025695161:role/LabRole   # mismo estilo que tu ejemplo
+    role: arn:aws:iam::647796053987:role/LabRole   # mismo estilo que tu ejemplo
   environment:
     TENANTS_TABLE: ${sls:stage}-Tenants
     MENU_TABLE: ${sls:stage}-MenuItems
@@ -15,6 +15,8 @@ provider:
     ORDER_EVENTS_TABLE: ${sls:stage}-OrderEvents
     EVENTS_BUS_NAME: ${sls:stage}-pardos-orders-bus
     REPORTS_BUCKET: ${sls:stage}-pardos-orders-reports
+  httpApi:
+    cors: true
 
 functions:
   # -------- MS TENANTS & MENU --------
@@ -84,18 +86,16 @@ functions:
           method: get
 
   # Exportador diario a S3 (reportes)
-  exportDailyReport:
-    handler: ms_workflow/export_daily_report.handler
-    events:
-      - schedule:
-          rate: rate(1 day)
-          enabled: true
+  # exportDailyReport:
+  #   handler: ms_workflow/export_daily_report.handler
+  #   events:
+  #     - schedule:
+  #         rate: rate(1 day)
+  #         enabled: true
 
   # Funciones usadas por Step Functions
   checkOrderStatus:
     handler: ms_workflow/check_order_status.handler
-    environment:
-      STATE_MACHINE_ARN: !GetAtt OrderWorkflowStateMachine.Arn
 
   calculateOrderMetrics:
     handler: ms_workflow/calculate_order_metrics.handler
@@ -184,7 +184,7 @@ resources:
         State: ENABLED
         Targets:
           - Arn: !GetAtt OrderWorkflowStateMachine.Arn
-            RoleArn: arn:aws:iam::663025695161:role/LabRole
+            RoleArn: arn:aws:iam::647796053987:role/LabRole
             Id: OrderWorkflowTarget
             InputTransformer:
               InputPathsMap:
@@ -199,10 +199,10 @@ resources:
                 }
 
     # ---------- S3 para reportes ----------
-    ReportsBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: ${self:provider.environment.REPORTS_BUCKET}
+    # ReportsBucket:
+    # Type: AWS::S3::Bucket
+    # Properties:
+    #   BucketName: ${self:provider.environment.REPORTS_BUCKET}
 
     # ---------- Step Functions (workflow real integrado) ----------
     OrderWorkflowStateMachine:
@@ -210,7 +210,7 @@ resources:
       Properties:
         StateMachineName: ${sls:stage}-pardos-order-workflow
         StateMachineType: STANDARD
-        RoleArn: arn:aws:iam::663025695161:role/LabRole
+        RoleArn: arn:aws:iam::647796053987:role/LabRole
         DefinitionString:
           Fn::Sub: |
             {
@@ -465,3 +465,5 @@ resources:
                 }
               }
             }
+plugins:
+  - serverless-offline

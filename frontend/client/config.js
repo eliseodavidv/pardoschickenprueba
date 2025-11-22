@@ -1,4 +1,3 @@
-// Configuracion del API Gateway
 const API_CONFIG = {
     baseURL: 'https://c9sut9oprg.execute-api.us-east-1.amazonaws.com',
     tenantId: 'pardos-chicken'
