@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pardos Chicken - Pedidos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍗 Pardos Chicken</h1>
+            <p class="subtitle">Haz tu pedido en línea</p>
+        </header>
+
+        <main>
+            <!-- Sección: Hacer Pedido -->
+            <section id="order-section" class="card">
+                <h2>Hacer un Pedido</h2>
+
+                <div id="menu-container" class="menu-grid">
+                    <p class="loading">Cargando menú...</p>
+                </div>
+
+                <div class="cart-summary" id="cart-summary" style="display: none;">
+                    <h3>Tu Pedido</h3>
+                    <div id="cart-items"></div>
+                    <div class="total">
+                        <strong>Total: S/ <span id="cart-total">0.00</span></strong>
+                    </div>
+                </div>
+
+                <form id="order-form" style="display: none;">
+                    <h3>Datos de Entrega</h3>
+                    <div class="form-group">
+                        <label for="customer_name">Nombre:</label>
+                        <input type="text" id="customer_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_phone">Teléfono:</label>
+                        <input type="tel" id="customer_phone" required placeholder="+51999999999">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_address">Dirección:</label>
+                        <textarea id="customer_address" required rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Hacer Pedido</button>
+                </form>
+            </section>
+
+            <!-- Sección: Ver Estado del Pedido -->
+            <section id="track-section" class="card">
+                <h2>Rastrear mi Pedido</h2>
+                <div class="form-group">
+                    <label for="order_id_input">ID del Pedido:</label>
+                    <input type="text" id="order_id_input" placeholder="Ingresa tu ID de pedido">
+                    <button onclick="trackOrder()" class="btn btn-secondary">Rastrear</button>
+                </div>
+
+                <div id="order-status" style="display: none;">
+                    <div id="order-info"></div>
+                    <div id="order-timeline"></div>
+                    <div id="order-metrics"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Pardos Chicken - Sistema de Gestión de Pedidos</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
