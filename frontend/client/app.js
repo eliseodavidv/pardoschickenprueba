@@ -156,8 +156,8 @@ async function createOrder() {
         items: cart.map(item => ({
             product_id: item.product_id,
             name: item.name,
-            quantity: item.quantity,
-            price: item.price
+            quantity: item.quantity
+            // price removido temporalmente por incompatibilidad con DynamoDB
         })),
         customer_name: customerName,
         customer_phone: customerPhone,
