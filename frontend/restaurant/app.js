@@ -367,3 +367,12 @@ window.onclick = function(event) {
         closeUpdateModal();
     }
 }
+
+// Función para cerrar sesión
+function logout() {
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+        localStorage.removeItem('restaurantAuth');
+        localStorage.removeItem('restaurantUser');
+        window.location.href = '../restaurant-login.html';
+    }
+}

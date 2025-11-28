@@ -7,10 +7,24 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Verificación de autenticación -->
+    <script>
+        if (localStorage.getItem('restaurantAuth') !== 'true') {
+            window.location.href = '../restaurant-login.html';
+        }
+    </script>
+
     <div class="container">
         <header>
-            <h1>🍗 Pardos Chicken - Dashboard</h1>
-            <p class="subtitle">Panel de Control del Restaurante</p>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                <div>
+                    <h1>🍗 Pardos Chicken - Dashboard</h1>
+                    <p class="subtitle">Panel de Control del Restaurante</p>
+                </div>
+                <button onclick="logout()" class="btn" style="background: #f44336; padding: 8px 15px; font-size: 14px;">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
             <div class="header-stats" id="header-stats">
                 <div class="stat">
                     <span class="stat-value" id="total-orders">-</span>

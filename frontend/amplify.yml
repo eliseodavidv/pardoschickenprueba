@@ -1,22 +1,10 @@
 version: 1
-applications:
-  - appRoot: frontend/client
-    frontend:
-      phases:
-        build:
-          commands:
-            - echo "Building client application..."
-      artifacts:
-        baseDirectory: /
-        files:
-          - '**/*'
-  - appRoot: frontend/restaurant
-    frontend:
-      phases:
-        build:
-          commands:
-            - echo "Building restaurant application..."
-      artifacts:
-        baseDirectory: /
-        files:
-          - '**/*'
+frontend:
+  phases:
+    build:
+      commands:
+        - echo "Building Pardos Chicken application..."
+  artifacts:
+    baseDirectory: frontend
+    files:
+      - '**/*'

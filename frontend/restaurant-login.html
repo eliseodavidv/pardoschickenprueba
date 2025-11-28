@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Personal de Restaurante</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            color: #ff9800;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff9800;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff9800;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #f57c00;
+        }
+
+        .error-message {
+            display: none;
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <a href="index.html" class="back-btn">← Volver</a>
+
+        <div class="logo">🔐</div>
+        <h1>Acceso Administrativo</h1>
+        <p class="subtitle">Personal de Restaurante</p>
+
+        <div id="errorMessage" class="error-message">
+            Usuario o contraseña incorrectos
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Usuario</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    placeholder="Ingresa tu usuario"
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="Ingresa tu contraseña"
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+        </form>
+
+        <div class="info-box">
+            <strong>Credenciales de prueba:</strong>
+            Usuario: <strong>admin</strong><br>
+            Contraseña: <strong>pardos2025</strong>
+        </div>
+    </div>
+
+    <script>
+        // Verificar si ya está autenticado
+        if (localStorage.getItem('restaurantAuth') === 'true') {
+            window.location.href = 'restaurant/index.html';
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Credenciales de autenticación
+            const validUsers = {
+                'admin': 'pardos2025',
+                'gerente': 'pardos2025',
+                'cocina': 'pardos2025',
+                'delivery': 'pardos2025'
+            };
+
+            if (validUsers[username] && validUsers[username] === password) {
+                // Login exitoso
+                localStorage.setItem('restaurantAuth', 'true');
+                localStorage.setItem('restaurantUser', username);
+                window.location.href = 'restaurant/index.html';
+            } else {
+                // Login fallido
+                errorMessage.classList.add('show');
+                document.getElementById('password').value = '';
+
+                setTimeout(() => {
+                    errorMessage.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
