@@ -14,21 +14,21 @@ async function loadMenu() {
     // Imágenes por defecto para cada producto
     const imageDefaults = {
         'Pollo Entero': { image_url: 'https://emofly.b-cdn.net/hbd_exvhac6ayb3ZKT/width:2048/plain/https://storage.googleapis.com/takeapp/media/cm33onl46000c0ckz29l161mu.jpg', description: 'Pollo a la brasa entero con papas y ensalada' },
-        '1/2 Pollo': { image_url: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?w=500&q=80', description: 'Medio pollo a la brasa con papas y ensalada' },
+        '1/2 Pollo': { image_url: 'https://www.donbelisario.com.pe/media/catalog/product/p/d/pdp_medio_papas_ensalada_1000x1000px.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700&format=jpeg', description: 'Medio pollo a la brasa con papas y ensalada' },
         '1/4 Pollo': { image_url: 'https://www.donbelisario.com.pe/media/catalog/product/p/d/pdp_un-cuarto_papas_ensalada_1000x1000px.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700&format=jpeg', description: 'Cuarto de pollo a la brasa con papas y ensalada' },
         'Parrilla Personal': { image_url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80', description: 'Anticuchos, chorizo, mollejitas y papas' },
         'Parrilla Familiar': { image_url: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500&q=80', description: 'Parrilla para 2-3 personas con variedad de carnes' },
         'Anticuchos (3 unid)': { image_url: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&q=80', description: 'Anticuchos de corazón con papa y choclo' },
-        'Chorizo Parrillero': { image_url: 'https://images.unsplash.com/photo-1612392166886-ee7b99725fdf?w=500&q=80', description: 'Chorizo argentino con papa dorada' },
+        'Chorizo Parrillero': { image_url: 'https://brimaliindustrial.com.pe/wp-content/uploads/2023/09/123-2.png', description: 'Chorizo argentino con papa dorada' },
         'Mollejitas': { image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80', description: 'Mollejas a la parrilla con limón' },
-        'Tequeños (6 unid)': { image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&q=80', description: 'Tequeños de queso con salsa golf' },
+        'Tequeños (6 unid)': { image_url: 'https://media-cdn.tripadvisor.com/media/photo-s/1b/22/44/8b/tequenos-with-guacamole.jpg', description: 'Tequeños de queso con salsa golf' },
         'Ensalada César': { image_url: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&q=80', description: 'Lechuga, pollo, crutones y aderezo césar' },
         'Ensalada Palta Reina': { image_url: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80', description: 'Palta rellena con pollo y verduras' },
         'Inca Kola 1.5L': { image_url: 'https://tofuu.getjusto.com/orioneat-local/resized2/gFvCdWbGefdZCx2tG-2400-x.webp', description: 'Gaseosa Inca Kola de 1.5 litros' },
-        'Coca Cola 1.5L': { image_url: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&q=80', description: 'Gaseosa Coca Cola de 1.5 litros' },
+        'Coca Cola 1.5L': { image_url: 'https://frankoschicken.pe/wp-content/uploads/2022/01/COCA-COLA-1.5-1200X1200-1.png', description: 'Gaseosa Coca Cola de 1.5 litros' },
         'Chicha Morada 1L': { image_url: 'https://freskos.com.pe/wp-content/uploads/2021/03/10-Chicha-morada.png', description: 'Chicha morada natural de 1 litro' },
         'Limonada Frozen': { image_url: 'https://www.ahorrarnuncafuetanbueno.com.pe/wp-content/uploads/2022/02/Limonada_frozen_912x700.jpg', description: 'Limonada frozen de 500ml' },
-        'Suspiro Limeño': { image_url: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&q=80', description: 'Postre tradicional peruano' },
+        'Suspiro Limeño': { image_url: 'https://perudelights.com/wp-content/uploads/2011/04/Suspiro.jpg', description: 'Postre tradicional peruano' },
         'Picarones con Miel': { image_url: 'https://larepublica.cronosmedia.glr.pe/migration/images/4MEE67QARFCKFESKCEI5F35QPA.jpg', description: '6 picarones con miel de chancaca' },
         'Brownie con Helado': { image_url: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80', description: 'Brownie de chocolate con helado de vainilla' }
     };
@@ -56,7 +56,7 @@ async function loadMenu() {
         // Menú de ejemplo con imágenes
         menu = [
             { product_id: '1', name: 'Pollo Entero', price: 62.90, category: 'Pollos', description: 'Pollo a la brasa entero con papas y ensalada', image_url: 'https://emofly.b-cdn.net/hbd_exvhac6ayb3ZKT/width:2048/plain/https://storage.googleapis.com/takeapp/media/cm33onl46000c0ckz29l161mu.jpg' },
-            { product_id: '2', name: '1/2 Pollo', price: 35.90, category: 'Pollos', description: 'Medio pollo a la brasa con papas y ensalada', image_url: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?w=500&q=80' },
+            { product_id: '2', name: '1/2 Pollo', price: 35.90, category: 'Pollos', description: 'Medio pollo a la brasa con papas y ensalada', image_url: 'https://www.donbelisario.com.pe/media/catalog/product/p/d/pdp_medio_papas_ensalada_1000x1000px.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700&format=jpeg' },
             { product_id: '3', name: '1/4 Pollo', price: 21.90, category: 'Pollos', description: 'Cuarto de pollo a la brasa con papas y ensalada', image_url: 'https://www.donbelisario.com.pe/media/catalog/product/p/d/pdp_un-cuarto_papas_ensalada_1000x1000px.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700&format=jpeg' },
             { product_id: '4', name: 'Parrilla Personal', price: 42.90, category: 'Parrillas', description: 'Anticuchos, chorizo, mollejitas y papas', image_url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80' },
             { product_id: '5', name: 'Anticuchos (3 unid)', price: 18.90, category: 'Entradas', description: 'Anticuchos de corazón con papa y choclo', image_url: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&q=80' },
