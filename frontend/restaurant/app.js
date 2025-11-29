@@ -61,17 +61,16 @@ function updateMetrics() {
         `${avgTimes.phases.delivering_minutes || 0} min`;
 }
 
-// Cargar todas las órdenes
+// Cargar todas las órdenes desde el dashboard
 async function loadAllOrders() {
     try {
-        const response = await fetch(
-            `${API_CONFIG.baseURL}/tenants/${API_CONFIG.tenantId}/orders`
-        );
-
-        if (!response.ok) throw new Error('Error al cargar órdenes');
-
-        allOrders = await response.json();
-        displayOrders();
+        // Usar los pedidos del dashboard que ya se cargaron
+        if (dashboardData && dashboardData.recent_orders) {
+            allOrders = dashboardData.recent_orders;
+            displayOrders();
+        } else {
+            throw new Error('No hay datos del dashboard');
+        }
 
     } catch (error) {
         console.error('Error loading orders:', error);
