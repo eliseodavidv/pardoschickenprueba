@@ -164,7 +164,7 @@ function createOrderCard(order) {
             <div class="order-header" onclick="toggleOrderDetails('${order.order_id}')">
                 <div class="order-title">
                     <span class="order-id">📋 #${order.order_id.substring(0, 8)}</span>
-                    <span class="order-time ${urgencyClass}"">⏱️ ${minutesElapsed} min</span>
+                    <span class="order-time ${urgencyClass}">⏱️ ${minutesElapsed} min</span>
                 </div>
                 <span class="status-badge status-${order.status}">${getStatusText(order.status)}</span>
             </div>
