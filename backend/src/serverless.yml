@@ -3,7 +3,7 @@ service: pardos-orders
 
 provider:
   name: aws
-  runtime: python3.13
+  runtime: python3.11
   memorySize: 1024
   timeout: 20
   iam:
@@ -99,6 +99,19 @@ functions:
 
   calculateOrderMetrics:
     handler: ms_workflow/calculate_order_metrics.handler
+
+  # -------- MS NOTIFICATIONS (EMAIL) --------
+  sendEmailNotification:
+    handler: ms_notifications/send_email_notification.handler
+    events:
+      - eventBridge:
+          eventBus: !GetAtt OrdersEventBus.Arn
+          pattern:
+            source:
+              - pardos.orders
+            detail-type:
+              - order.created
+              - order.updated
 
 resources:
   Resources:

@@ -14,6 +14,7 @@ def handler(event, context):
     customer_name = body.get("customer_name", "Anonimo")
     customer_address = body.get("customer_address", "")
     customer_phone = body.get("customer_phone", "")
+    customer_email = body.get("customer_email", "")
 
     if not items:
         return {"statusCode": 400, "body": json.dumps({"message": "items is required"})}
@@ -29,6 +30,7 @@ def handler(event, context):
         "customer_name": customer_name,
         "customer_address": customer_address,
         "customer_phone": customer_phone,
+        "customer_email": customer_email,
         "created_at": now,
         "updated_at": now,
     }
@@ -45,7 +47,7 @@ def handler(event, context):
         }
     )
 
-    # Publicación al bus de eventos -> Step Functions
+    # Publicación al bus de eventos -> Step Functions y Email Notifications
     publish_event(
         source="pardos.orders",
         detail_type="order.created",
@@ -53,6 +55,8 @@ def handler(event, context):
             "tenant_id": tenant_id,
             "order_id": order_id,
             "status": "RECEIVED",
+            "customer_email": customer_email,
+            "customer_name": customer_name,
         },
     )
 

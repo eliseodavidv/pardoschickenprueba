@@ -107,6 +107,7 @@ def handler(event, context):
     )
 
     # Publicar evento de actualización (por si otra cosa quiere consumirlo)
+    # Incluir datos del cliente para notificaciones por email
     publish_event(
         source="pardos.orders",
         detail_type="order.updated",
@@ -117,6 +118,8 @@ def handler(event, context):
             "previous_status": current_status,
             "by_role": role,
             "attended_by": attended_by,
+            "customer_email": current_order.get("customer_email", ""),
+            "customer_name": current_order.get("customer_name", "Cliente"),
         },
     )
 

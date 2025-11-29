@@ -150,6 +150,7 @@ async function createOrder() {
 
     const customerName = document.getElementById('customer_name').value;
     const customerPhone = document.getElementById('customer_phone').value;
+    const customerEmail = document.getElementById('customer_email').value;
     const customerAddress = document.getElementById('customer_address').value;
 
     const orderData = {
@@ -161,6 +162,7 @@ async function createOrder() {
         })),
         customer_name: customerName,
         customer_phone: customerPhone,
+        customer_email: customerEmail,
         customer_address: customerAddress
     };
 
