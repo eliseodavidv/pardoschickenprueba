@@ -6,7 +6,7 @@ import urllib.error
 
 # SendGrid API Key desde variables de entorno
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '')
-SENDGRID_FROM_EMAIL = 'noreply@pardoschicken.com'
+SENDGRID_FROM_EMAIL = 'eliseo.velasquez@utec.edu.pe'
 SENDGRID_FROM_NAME = 'Pardos Chicken'
 
 def handler(event, context):
