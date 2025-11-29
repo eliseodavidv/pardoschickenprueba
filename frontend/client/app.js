@@ -41,14 +41,22 @@ function displayMenu() {
     menu.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'menu-item';
+
+        // Imagen por defecto si no tiene image_url
+        const imageUrl = item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80';
+
         itemDiv.innerHTML = `
-            <h3>${item.name}</h3>
-            <span class="category">${item.category || 'General'}</span>
-            <p class="price">S/ ${Number(item.price).toFixed(2)}</p>
-            <div class="quantity-controls">
-                <button onclick="decreaseQuantity('${item.product_id}')">-</button>
-                <span id="qty-${item.product_id}">0</span>
-                <button onclick="increaseQuantity('${item.product_id}')">+</button>
+            ${item.image_url ? `<div class="menu-item-image" style="background-image: url('${imageUrl}')"></div>` : ''}
+            <div class="menu-item-content">
+                <h3>${item.name}</h3>
+                <span class="category">${item.category || 'General'}</span>
+                ${item.description ? `<p class="description">${item.description}</p>` : ''}
+                <p class="price">S/ ${Number(item.price).toFixed(2)}</p>
+                <div class="quantity-controls">
+                    <button onclick="decreaseQuantity('${item.product_id}')">-</button>
+                    <span id="qty-${item.product_id}">0</span>
+                    <button onclick="increaseQuantity('${item.product_id}')">+</button>
+                </div>
             </div>
         `;
         container.appendChild(itemDiv);

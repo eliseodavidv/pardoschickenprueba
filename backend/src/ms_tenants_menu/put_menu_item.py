@@ -21,7 +21,9 @@ def handler(event, context):
         "product_id": product_id,
         "name": name,
         "price": float(price),
-        "category": body.get("category", "default")
+        "category": body.get("category", "default"),
+        "description": body.get("description", ""),
+        "image_url": body.get("image_url", "")
     }
 
     table = menu_table()
