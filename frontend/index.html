@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pardos Chicken - Sistema de Pedidos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #d84315 0%, #bf360c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 60px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #d84315;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+
+        .apps {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .app-card {
+            flex: 1;
+            min-width: 200px;
+            background: linear-gradient(135deg, #d84315 0%, #bf360c 100%);
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(216, 67, 21, 0.4);
+        }
+
+        .app-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .app-description {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .apps {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🍗</div>
+        <h1>Pardos Chicken</h1>
+        <p class="subtitle">Sistema de Gestión de Pedidos</p>
+
+        <div class="apps">
+            <a href="/client/" class="app-card">
+                <div class="app-icon">🛒</div>
+                <div class="app-title">Hacer Pedido</div>
+                <div class="app-description">Aplicación para clientes</div>
+            </a>
+
+            <a href="/restaurant/" class="app-card">
+                <div class="app-icon">📊</div>
+                <div class="app-title">Dashboard</div>
+                <div class="app-description">Panel administrativo</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            © 2025 Pardos Chicken - Cloud Computing
+        </div>
+    </div>
+</body>
+</html>
