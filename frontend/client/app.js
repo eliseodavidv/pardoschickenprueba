@@ -11,11 +11,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Cargar menú desde el API
 async function loadMenu() {
+    // Imágenes por defecto para cada producto
+    const imageDefaults = {
+        'Pollo Entero': { image_url: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=500&q=80', description: 'Pollo a la brasa entero con papas y ensalada' },
+        '1/2 Pollo': { image_url: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?w=500&q=80', description: 'Medio pollo a la brasa con papas y ensalada' },
+        '1/4 Pollo': { image_url: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&q=80', description: 'Cuarto de pollo a la brasa con papas y ensalada' },
+        'Parrilla Personal': { image_url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80', description: 'Anticuchos, chorizo, mollejitas y papas' },
+        'Parrilla Familiar': { image_url: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500&q=80', description: 'Parrilla para 2-3 personas con variedad de carnes' },
+        'Anticuchos (3 unid)': { image_url: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&q=80', description: 'Anticuchos de corazón con papa y choclo' },
+        'Chorizo Parrillero': { image_url: 'https://images.unsplash.com/photo-1612392166886-ee7b99725fdf?w=500&q=80', description: 'Chorizo argentino con papa dorada' },
+        'Mollejitas': { image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80', description: 'Mollejas a la parrilla con limón' },
+        'Tequeños (6 unid)': { image_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&q=80', description: 'Tequeños de queso con salsa golf' },
+        'Ensalada César': { image_url: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&q=80', description: 'Lechuga, pollo, crutones y aderezo césar' },
+        'Ensalada Palta Reina': { image_url: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80', description: 'Palta rellena con pollo y verduras' },
+        'Inca Kola 1.5L': { image_url: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=500&q=80', description: 'Gaseosa Inca Kola de 1.5 litros' },
+        'Coca Cola 1.5L': { image_url: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&q=80', description: 'Gaseosa Coca Cola de 1.5 litros' },
+        'Chicha Morada 1L': { image_url: 'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=500&q=80', description: 'Chicha morada natural de 1 litro' },
+        'Limonada Frozen': { image_url: 'https://images.unsplash.com/photo-1523677011781-c91d1bbe1f33?w=500&q=80', description: 'Limonada frozen de 500ml' },
+        'Suspiro Limeño': { image_url: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&q=80', description: 'Postre tradicional peruano' },
+        'Picarones con Miel': { image_url: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=500&q=80', description: '6 picarones con miel de chancaca' },
+        'Brownie con Helado': { image_url: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80', description: 'Brownie de chocolate con helado de vainilla' }
+    };
+
     try {
         const response = await fetch(`${API_CONFIG.baseURL}/tenants/${API_CONFIG.tenantId}/menu`);
         if (!response.ok) throw new Error('Error al cargar el menú');
 
         menu = await response.json();
+
+        // Agregar imágenes y descripciones faltantes
+        menu = menu.map(item => {
+            const defaults = imageDefaults[item.name];
+            return {
+                ...item,
+                image_url: item.image_url || (defaults?.image_url) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80',
+                description: item.description || (defaults?.description) || ''
+            };
+        });
+
         displayMenu();
     } catch (error) {
         console.error('Error loading menu:', error);
