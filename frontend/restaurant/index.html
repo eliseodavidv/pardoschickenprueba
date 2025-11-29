@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Verificación de autenticación -->
+    <!-- Auto-login para demo -->
     <script>
-        if (localStorage.getItem('restaurantAuth') !== 'true') {
-            window.location.href = '../restaurant-login.html';
+        // Establecer autenticación automáticamente para simplificar acceso
+        if (!localStorage.getItem('restaurantAuth')) {
+            localStorage.setItem('restaurantAuth', 'true');
+            localStorage.setItem('restaurantUser', 'admin');
         }
     </script>
 
