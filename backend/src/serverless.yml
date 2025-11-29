@@ -105,7 +105,7 @@ functions:
     handler: ms_notifications/send_email_notification.handler
     events:
       - eventBridge:
-          eventBus: !GetAtt OrdersEventBus.Arn
+          eventBus: !GetAtt OrdersEventBus.Name
           pattern:
             source:
               - pardos.orders
