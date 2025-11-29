@@ -20,14 +20,16 @@ async function loadMenu() {
     } catch (error) {
         console.error('Error loading menu:', error);
         showNotification('Error al cargar el menú. Usando menú de ejemplo.', 'error');
-        // Menú de ejemplo para desarrollo
+        // Menú de ejemplo con imágenes
         menu = [
-            { product_id: '1', name: 'Pollo Entero', price: 45.00, category: 'Pollo a la Brasa' },
-            { product_id: '2', name: '1/2 Pollo', price: 25.00, category: 'Pollo a la Brasa' },
-            { product_id: '3', name: '1/4 Pollo', price: 15.00, category: 'Pollo a la Brasa' },
-            { product_id: '4', name: 'Papas Fritas', price: 8.00, category: 'Acompañamientos' },
-            { product_id: '5', name: 'Ensalada', price: 10.00, category: 'Acompañamientos' },
-            { product_id: '6', name: 'Inca Kola 1.5L', price: 7.00, category: 'Bebidas' }
+            { product_id: '1', name: 'Pollo Entero', price: 62.90, category: 'Pollos', description: 'Pollo a la brasa entero con papas y ensalada', image_url: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=500&q=80' },
+            { product_id: '2', name: '1/2 Pollo', price: 35.90, category: 'Pollos', description: 'Medio pollo a la brasa con papas y ensalada', image_url: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?w=500&q=80' },
+            { product_id: '3', name: '1/4 Pollo', price: 21.90, category: 'Pollos', description: 'Cuarto de pollo a la brasa con papas y ensalada', image_url: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&q=80' },
+            { product_id: '4', name: 'Parrilla Personal', price: 42.90, category: 'Parrillas', description: 'Anticuchos, chorizo, mollejitas y papas', image_url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80' },
+            { product_id: '5', name: 'Anticuchos (3 unid)', price: 18.90, category: 'Entradas', description: 'Anticuchos de corazón con papa y choclo', image_url: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&q=80' },
+            { product_id: '6', name: 'Inca Kola 1.5L', price: 8.90, category: 'Bebidas', description: 'Gaseosa Inca Kola de 1.5 litros', image_url: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=500&q=80' },
+            { product_id: '7', name: 'Ensalada César', price: 24.90, category: 'Ensaladas', description: 'Lechuga, pollo, crutones y aderezo césar', image_url: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&q=80' },
+            { product_id: '8', name: 'Brownie con Helado', price: 14.90, category: 'Postres', description: 'Brownie de chocolate con helado de vainilla', image_url: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80' }
         ];
         displayMenu();
     }
