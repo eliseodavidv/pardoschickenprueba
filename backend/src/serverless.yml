@@ -15,6 +15,7 @@ provider:
     ORDER_EVENTS_TABLE: ${sls:stage}-OrderEvents
     EVENTS_BUS_NAME: ${sls:stage}-pardos-orders-bus
     REPORTS_BUCKET: ${sls:stage}-pardos-orders-reports
+    SNS_TOPIC_ARN: !Ref OrderNotificationsTopic
   httpApi:
     cors: true
 
@@ -115,6 +116,14 @@ functions:
 
 resources:
   Resources:
+    # ---------- SNS Topic para Email Notifications ----------
+    OrderNotificationsTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${sls:stage}-pardos-order-notifications
+        DisplayName: "Pardos Chicken - Notificaciones de Pedidos"
+        # Nota: Los usuarios deben suscribirse con su email y confirmar
+
     # ---------- DynamoDB ----------
     TenantsTable:
       Type: AWS::DynamoDB::Table

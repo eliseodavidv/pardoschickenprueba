@@ -165,6 +165,12 @@
               "LogGroupName": "/aws/lambda/pardos-orders-dev-calculateOrderMetrics"
             }
           },
+          "SendEmailNotificationLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/pardos-orders-dev-sendEmailNotification"
+            }
+          },
           "GetTenantsLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -172,7 +178,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_tenants_menu/get_tenants.handler",
               "Runtime": "python3.11",
@@ -202,7 +208,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_tenants_menu/get_menu.handler",
               "Runtime": "python3.11",
@@ -232,7 +238,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_tenants_menu/put_menu_item.handler",
               "Runtime": "python3.11",
@@ -262,7 +268,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/create_order.handler",
               "Runtime": "python3.11",
@@ -292,7 +298,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/get_order.handler",
               "Runtime": "python3.11",
@@ -322,7 +328,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/list_orders.handler",
               "Runtime": "python3.11",
@@ -352,7 +358,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_orders/get_order_metrics.handler",
               "Runtime": "python3.11",
@@ -382,7 +388,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/update_order_step.handler",
               "Runtime": "python3.11",
@@ -412,7 +418,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/get_dashboard_summary.handler",
               "Runtime": "python3.11",
@@ -442,7 +448,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/check_order_status.handler",
               "Runtime": "python3.11",
@@ -472,7 +478,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z/pardos-orders.zip"
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
               },
               "Handler": "ms_workflow/calculate_order_metrics.handler",
               "Runtime": "python3.11",
@@ -495,114 +501,227 @@
               "CalculateOrderMetricsLogGroup"
             ]
           },
-          "GetTenantsLambdaVersionWfHAmf2cChjzKjZfhwuRfivGZ4BfBWmNxe8Jrj65U": {
+          "SendEmailNotificationLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z/pardos-orders.zip"
+              },
+              "Handler": "ms_notifications/send_email_notification.handler",
+              "Runtime": "python3.11",
+              "FunctionName": "pardos-orders-dev-sendEmailNotification",
+              "MemorySize": 1024,
+              "Timeout": 20,
+              "Environment": {
+                "Variables": {
+                  "TENANTS_TABLE": "dev-Tenants",
+                  "MENU_TABLE": "dev-MenuItems",
+                  "ORDERS_TABLE": "dev-Orders",
+                  "ORDER_EVENTS_TABLE": "dev-OrderEvents",
+                  "EVENTS_BUS_NAME": "dev-pardos-orders-bus",
+                  "REPORTS_BUCKET": "dev-pardos-orders-reports"
+                }
+              },
+              "Role": "arn:aws:iam::647796053987:role/LabRole"
+            },
+            "DependsOn": [
+              "SendEmailNotificationLogGroup"
+            ]
+          },
+          "GetTenantsLambdaVersionGd6s7Www7UcHUktjgS5F6sDZ7820yGNQ3Z5gOmMk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetTenantsLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "GetMenuLambdaVersionyggXEMfetH7ShWVAvBhsAc8a00hiRQWv3zRvITlE": {
+          "GetMenuLambdaVersion46DIfndlYuXmvtN4OxynpndYIEGYJNtLrL2cJ3uuc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetMenuLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "PutMenuItemLambdaVersion2Td7iDZe0yx0O9pdpSwRj3ZhDxk2ilYPpi1DE6r3SGY": {
+          "PutMenuItemLambdaVersionU7SgyICJmWi32D259rCFy0rWRP6yGvOAwYy27MDkxQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "PutMenuItemLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "CreateOrderLambdaVersion6aqtrvWpreO0o1Zy0gmdN9JB6JYlrAFI5Zw7vQNU": {
+          "CreateOrderLambdaVersionKxvoNAIY0dmTNmXJRymO4SUjQI5q0Iv1gXuWtyEv9c8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateOrderLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "GetOrderLambdaVersionIjcjOEwGw3DIxwX6hvkda14OApITE6zofXDdNdE98": {
+          "GetOrderLambdaVersioncUDH1UlDFSyhekuct0WSmTETmlMpBT0w1E0Fk8gdgGs": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetOrderLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "ListOrdersLambdaVersionSUvJ8FDkAeGADaKT8ejy3XIDX6GMmDbDZy5NlzmHGg": {
+          "ListOrdersLambdaVersioneL9jE7FG1iYlDizqx2RssI4wslh20AsrVJNpPuoqBU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ListOrdersLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "GetOrderMetricsLambdaVersion1efMwoDIieVF16PiGBBjBmoBwpOb0XugDJHOvSok6Y": {
+          "GetOrderMetricsLambdaVersionX3JRi66GLketxhE8mBZRbrqCE3wozlzOlC6PWc6pI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetOrderMetricsLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "UpdateOrderStepLambdaVersionACwn3vXZJLajVlj98kATtrv9rOWtikQls89NIEaUIW0": {
+          "UpdateOrderStepLambdaVersionCL29mdmGw9OuGiokmOQipn7UeKHq70MucIKdRxtlLY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateOrderStepLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "GetDashboardSummaryLambdaVersionOlrcaPyhTMciXgk53PswaBk0l3v2rqNdw34b68iuxa8": {
+          "GetDashboardSummaryLambdaVersionnn6RnrORO1bH4H8aZacyzVG2QOZ2d2XWsbhGxb46BVs": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetDashboardSummaryLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "CheckOrderStatusLambdaVersionMaS7KcBJTgv8n4ExJZY0Hc5Yyu1pVSnEUUX4jFqFAQ": {
+          "CheckOrderStatusLambdaVersion41vgcJK3ia1Ne0pdBVNGPQDXOjIN8d2UIRHk2aVSg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CheckOrderStatusLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
             }
           },
-          "CalculateOrderMetricsLambdaVersionE41Gf4yQt6wDXQN5gCkrJU1Azr1E7npSPPbD22dg5N4": {
+          "CalculateOrderMetricsLambdaVersionI3F4yhOtmV1H6Lnq9ABmsrI5cWQfdNx1rPsXDNXczw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CalculateOrderMetricsLambdaFunction"
               },
-              "CodeSha256": "2LIt2roFYaXsI2rMvEo5J9j5Km5/B4+qND51cuiJCgc="
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
+            }
+          },
+          "SendEmailNotificationLambdaVersioniQmSTEMHm43W1nFHGF1U7NhDnqALwt5vcCK0gODccag": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "SendEmailNotificationLambdaFunction"
+              },
+              "CodeSha256": "Ce4V4y8w/Fv8P5FyByq6rCeFoDlgOtezEIs/PR6RS6E="
+            }
+          },
+          "PardosordersdevsendEmailNotificationrule1EventBridgeRule": {
+            "Type": "AWS::Events::Rule",
+            "Properties": {
+              "EventBusName": {
+                "Fn::GetAtt": [
+                  "OrdersEventBus",
+                  "Name"
+                ]
+              },
+              "EventPattern": {
+                "source": [
+                  "pardos.orders"
+                ],
+                "detail-type": [
+                  "order.created",
+                  "order.updated"
+                ]
+              },
+              "Name": "pardos-orders-dev-sendEmailNotification-rule-1",
+              "State": "ENABLED",
+              "Targets": [
+                {
+                  "Arn": {
+                    "Fn::GetAtt": [
+                      "SendEmailNotificationLambdaFunction",
+                      "Arn"
+                    ]
+                  },
+                  "Id": "pardos-orders-dev-sendEmailNotification-rule-1-target"
+                }
+              ]
+            }
+          },
+          "SendEmailNotificationEventBridgeLambdaPermission1": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "Action": "lambda:InvokeFunction",
+              "FunctionName": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"PardosordersdevsendEmailNotificationrule1EventBridgeRule\"][\"Properties\"][\"Targets\"][0][\"Arn\"]"
+              },
+              "Principal": "events.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  ":",
+                  [
+                    "arn",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    "events",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    {
+                      "Fn::Join": [
+                        "/",
+                        [
+                          "rule",
+                          {
+                            "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"PardosordersdevsendEmailNotificationrule1EventBridgeRule\"][\"Properties\"][\"EventBusName\"]"
+                          },
+                          "pardos-orders-dev-sendEmailNotification-rule-1"
+                        ]
+                      ]
+                    }
+                  ]
+                ]
+              }
             }
           },
           "HttpApi": {
@@ -1461,7 +1580,7 @@
           "GetTenantsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetTenantsLambdaVersionWfHAmf2cChjzKjZfhwuRfivGZ4BfBWmNxe8Jrj65U"
+              "Ref": "GetTenantsLambdaVersionGd6s7Www7UcHUktjgS5F6sDZ7820yGNQ3Z5gOmMk"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-GetTenantsLambdaFunctionQualifiedArn"
@@ -1470,7 +1589,7 @@
           "GetMenuLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetMenuLambdaVersionyggXEMfetH7ShWVAvBhsAc8a00hiRQWv3zRvITlE"
+              "Ref": "GetMenuLambdaVersion46DIfndlYuXmvtN4OxynpndYIEGYJNtLrL2cJ3uuc"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-GetMenuLambdaFunctionQualifiedArn"
@@ -1479,7 +1598,7 @@
           "PutMenuItemLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "PutMenuItemLambdaVersion2Td7iDZe0yx0O9pdpSwRj3ZhDxk2ilYPpi1DE6r3SGY"
+              "Ref": "PutMenuItemLambdaVersionU7SgyICJmWi32D259rCFy0rWRP6yGvOAwYy27MDkxQ"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-PutMenuItemLambdaFunctionQualifiedArn"
@@ -1488,7 +1607,7 @@
           "CreateOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateOrderLambdaVersion6aqtrvWpreO0o1Zy0gmdN9JB6JYlrAFI5Zw7vQNU"
+              "Ref": "CreateOrderLambdaVersionKxvoNAIY0dmTNmXJRymO4SUjQI5q0Iv1gXuWtyEv9c8"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-CreateOrderLambdaFunctionQualifiedArn"
@@ -1497,7 +1616,7 @@
           "GetOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetOrderLambdaVersionIjcjOEwGw3DIxwX6hvkda14OApITE6zofXDdNdE98"
+              "Ref": "GetOrderLambdaVersioncUDH1UlDFSyhekuct0WSmTETmlMpBT0w1E0Fk8gdgGs"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-GetOrderLambdaFunctionQualifiedArn"
@@ -1506,7 +1625,7 @@
           "ListOrdersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ListOrdersLambdaVersionSUvJ8FDkAeGADaKT8ejy3XIDX6GMmDbDZy5NlzmHGg"
+              "Ref": "ListOrdersLambdaVersioneL9jE7FG1iYlDizqx2RssI4wslh20AsrVJNpPuoqBU"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-ListOrdersLambdaFunctionQualifiedArn"
@@ -1515,7 +1634,7 @@
           "GetOrderMetricsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetOrderMetricsLambdaVersion1efMwoDIieVF16PiGBBjBmoBwpOb0XugDJHOvSok6Y"
+              "Ref": "GetOrderMetricsLambdaVersionX3JRi66GLketxhE8mBZRbrqCE3wozlzOlC6PWc6pI"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-GetOrderMetricsLambdaFunctionQualifiedArn"
@@ -1524,7 +1643,7 @@
           "UpdateOrderStepLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateOrderStepLambdaVersionACwn3vXZJLajVlj98kATtrv9rOWtikQls89NIEaUIW0"
+              "Ref": "UpdateOrderStepLambdaVersionCL29mdmGw9OuGiokmOQipn7UeKHq70MucIKdRxtlLY"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-UpdateOrderStepLambdaFunctionQualifiedArn"
@@ -1533,7 +1652,7 @@
           "GetDashboardSummaryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetDashboardSummaryLambdaVersionOlrcaPyhTMciXgk53PswaBk0l3v2rqNdw34b68iuxa8"
+              "Ref": "GetDashboardSummaryLambdaVersionnn6RnrORO1bH4H8aZacyzVG2QOZ2d2XWsbhGxb46BVs"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-GetDashboardSummaryLambdaFunctionQualifiedArn"
@@ -1542,7 +1661,7 @@
           "CheckOrderStatusLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CheckOrderStatusLambdaVersionMaS7KcBJTgv8n4ExJZY0Hc5Yyu1pVSnEUUX4jFqFAQ"
+              "Ref": "CheckOrderStatusLambdaVersion41vgcJK3ia1Ne0pdBVNGPQDXOjIN8d2UIRHk2aVSg"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-CheckOrderStatusLambdaFunctionQualifiedArn"
@@ -1551,10 +1670,19 @@
           "CalculateOrderMetricsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CalculateOrderMetricsLambdaVersionE41Gf4yQt6wDXQN5gCkrJU1Azr1E7npSPPbD22dg5N4"
+              "Ref": "CalculateOrderMetricsLambdaVersionI3F4yhOtmV1H6Lnq9ABmsrI5cWQfdNx1rPsXDNXczw"
             },
             "Export": {
               "Name": "sls-pardos-orders-dev-CalculateOrderMetricsLambdaFunctionQualifiedArn"
+            }
+          },
+          "SendEmailNotificationLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "SendEmailNotificationLambdaVersioniQmSTEMHm43W1nFHGF1U7NhDnqALwt5vcCK0gODccag"
+            },
+            "Export": {
+              "Name": "sls-pardos-orders-dev-SendEmailNotificationLambdaFunctionQualifiedArn"
             }
           },
           "HttpApiId": {
@@ -1700,7 +1828,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "GetTenantsLambdaVersionWfHAmf2cChjzKjZfhwuRfivGZ4BfBWmNxe8Jrj65U"
+        "versionLogicalId": "GetTenantsLambdaVersionGd6s7Www7UcHUktjgS5F6sDZ7820yGNQ3Z5gOmMk"
       },
       "getMenu": {
         "handler": "ms_tenants_menu/get_menu.handler",
@@ -1720,7 +1848,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "GetMenuLambdaVersionyggXEMfetH7ShWVAvBhsAc8a00hiRQWv3zRvITlE"
+        "versionLogicalId": "GetMenuLambdaVersion46DIfndlYuXmvtN4OxynpndYIEGYJNtLrL2cJ3uuc"
       },
       "putMenuItem": {
         "handler": "ms_tenants_menu/put_menu_item.handler",
@@ -1740,7 +1868,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "PutMenuItemLambdaVersion2Td7iDZe0yx0O9pdpSwRj3ZhDxk2ilYPpi1DE6r3SGY"
+        "versionLogicalId": "PutMenuItemLambdaVersionU7SgyICJmWi32D259rCFy0rWRP6yGvOAwYy27MDkxQ"
       },
       "createOrder": {
         "handler": "ms_orders/create_order.handler",
@@ -1760,7 +1888,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "CreateOrderLambdaVersion6aqtrvWpreO0o1Zy0gmdN9JB6JYlrAFI5Zw7vQNU"
+        "versionLogicalId": "CreateOrderLambdaVersionKxvoNAIY0dmTNmXJRymO4SUjQI5q0Iv1gXuWtyEv9c8"
       },
       "getOrder": {
         "handler": "ms_orders/get_order.handler",
@@ -1780,7 +1908,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "GetOrderLambdaVersionIjcjOEwGw3DIxwX6hvkda14OApITE6zofXDdNdE98"
+        "versionLogicalId": "GetOrderLambdaVersioncUDH1UlDFSyhekuct0WSmTETmlMpBT0w1E0Fk8gdgGs"
       },
       "listOrders": {
         "handler": "ms_orders/list_orders.handler",
@@ -1800,7 +1928,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "ListOrdersLambdaVersionSUvJ8FDkAeGADaKT8ejy3XIDX6GMmDbDZy5NlzmHGg"
+        "versionLogicalId": "ListOrdersLambdaVersioneL9jE7FG1iYlDizqx2RssI4wslh20AsrVJNpPuoqBU"
       },
       "getOrderMetrics": {
         "handler": "ms_orders/get_order_metrics.handler",
@@ -1820,7 +1948,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "GetOrderMetricsLambdaVersion1efMwoDIieVF16PiGBBjBmoBwpOb0XugDJHOvSok6Y"
+        "versionLogicalId": "GetOrderMetricsLambdaVersionX3JRi66GLketxhE8mBZRbrqCE3wozlzOlC6PWc6pI"
       },
       "updateOrderStep": {
         "handler": "ms_workflow/update_order_step.handler",
@@ -1840,7 +1968,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "UpdateOrderStepLambdaVersionACwn3vXZJLajVlj98kATtrv9rOWtikQls89NIEaUIW0"
+        "versionLogicalId": "UpdateOrderStepLambdaVersionCL29mdmGw9OuGiokmOQipn7UeKHq70MucIKdRxtlLY"
       },
       "getDashboardSummary": {
         "handler": "ms_workflow/get_dashboard_summary.handler",
@@ -1860,7 +1988,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "GetDashboardSummaryLambdaVersionOlrcaPyhTMciXgk53PswaBk0l3v2rqNdw34b68iuxa8"
+        "versionLogicalId": "GetDashboardSummaryLambdaVersionnn6RnrORO1bH4H8aZacyzVG2QOZ2d2XWsbhGxb46BVs"
       },
       "checkOrderStatus": {
         "handler": "ms_workflow/check_order_status.handler",
@@ -1871,7 +1999,7 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "CheckOrderStatusLambdaVersionMaS7KcBJTgv8n4ExJZY0Hc5Yyu1pVSnEUUX4jFqFAQ"
+        "versionLogicalId": "CheckOrderStatusLambdaVersion41vgcJK3ia1Ne0pdBVNGPQDXOjIN8d2UIRHk2aVSg"
       },
       "calculateOrderMetrics": {
         "handler": "ms_workflow/calculate_order_metrics.handler",
@@ -1882,7 +2010,29 @@
         "timeout": 20,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "CalculateOrderMetricsLambdaVersionE41Gf4yQt6wDXQN5gCkrJU1Azr1E7npSPPbD22dg5N4"
+        "versionLogicalId": "CalculateOrderMetricsLambdaVersionI3F4yhOtmV1H6Lnq9ABmsrI5cWQfdNx1rPsXDNXczw"
+      },
+      "sendEmailNotification": {
+        "handler": "ms_notifications/send_email_notification.handler",
+        "events": [
+          {
+            "eventBridge": {
+              "eventBus": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"PardosordersdevsendEmailNotificationrule1EventBridgeRule\"][\"Properties\"][\"EventBusName\"]"
+              },
+              "pattern": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"PardosordersdevsendEmailNotificationrule1EventBridgeRule\"][\"Properties\"][\"EventPattern\"]"
+              }
+            }
+          }
+        ],
+        "name": "pardos-orders-dev-sendEmailNotification",
+        "package": {},
+        "memory": 1024,
+        "timeout": 20,
+        "runtime": "python3.11",
+        "vpc": {},
+        "versionLogicalId": "SendEmailNotificationLambdaVersioniQmSTEMHm43W1nFHGF1U7NhDnqALwt5vcCK0gODccag"
       }
     },
     "resources": {
@@ -2071,7 +2221,7 @@
     "artifact": "C:\\Users\\user\\pardoschickenprueba\\backend\\src\\.serverless\\pardos-orders.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/pardos-orders/dev/1764372333763-2025-11-28T23:25:33.763Z",
+    "artifactDirectoryName": "serverless/pardos-orders/dev/1764387995748-2025-11-29T03:46:35.748Z",
     "artifact": "pardos-orders.zip"
   }
 }

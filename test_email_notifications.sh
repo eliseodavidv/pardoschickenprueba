@@ -9,9 +9,9 @@ echo "========================================="
 echo ""
 
 # Configuración (CAMBIAR ESTOS VALORES)
-API_URL="https://c1qx4jzzy2.execute-api.us-east-1.amazonaws.com"
+API_URL="https://c9sut9oprg.execute-api.us-east-1.amazonaws.com"
 TENANT_ID="pardos-chicken"
-TEST_EMAIL="tu-email-de-prueba@example.com"
+TEST_EMAIL="test@example.com"
 TEST_NAME="Juan Pérez (Test)"
 
 echo "📋 Configuración del Test:"

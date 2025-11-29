@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Conectividad - Pardos Chicken</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-card h2 {
+            margin-top: 0;
+            color: #d84315;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.success {
+            background: #4caf50;
+            color: white;
+        }
+        .status.error {
+            background: #f44336;
+            color: white;
+        }
+        .status.loading {
+            background: #ff9800;
+            color: white;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        button {
+            background: #d84315;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #bf360c;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .metric {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .metric strong {
+            display: block;
+            color: #d84315;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test de Conectividad - Pardos Chicken</h1>
+
+    <div class="test-card">
+        <h2>Configuración del API</h2>
+        <div class="metric">
+            <strong>Base URL:</strong>
+            <span id="api-url">-</span>
+        </div>
+        <div class="metric">
+            <strong>Tenant ID:</strong>
+            <span id="tenant-id">-</span>
+        </div>
+    </div>
+
+    <div class="test-card">
+        <h2>
+            1. Test de Menú
+            <span id="menu-status" class="status loading">Probando...</span>
+        </h2>
+        <button onclick="testMenu()">Probar Menú</button>
+        <div class="grid" id="menu-results"></div>
+        <pre id="menu-response"></pre>
+    </div>
+
+    <div class="test-card">
+        <h2>
+            2. Test de Tenants
+            <span id="tenants-status" class="status loading">Probando...</span>
+        </h2>
+        <button onclick="testTenants()">Probar Tenants</button>
+        <pre id="tenants-response"></pre>
+    </div>
+
+    <div class="test-card">
+        <h2>
+            3. Test de Dashboard
+            <span id="dashboard-status" class="status loading">Probando...</span>
+        </h2>
+        <button onclick="testDashboard()">Probar Dashboard</button>
+        <pre id="dashboard-response"></pre>
+    </div>
+
+    <div class="test-card">
+        <h2>
+            4. Test de Crear Pedido
+            <span id="order-status" class="status loading">Listo para probar</span>
+        </h2>
+        <button onclick="testCreateOrder()">Crear Pedido de Prueba</button>
+        <pre id="order-response"></pre>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Mostrar configuración
+        document.getElementById('api-url').textContent = API_CONFIG.baseURL;
+        document.getElementById('tenant-id').textContent = API_CONFIG.tenantId;
+
+        // Test 1: Menú
+        async function testMenu() {
+            const statusEl = document.getElementById('menu-status');
+            const responseEl = document.getElementById('menu-response');
+            const resultsEl = document.getElementById('menu-results');
+
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'Cargando...';
+
+            try {
+                const response = await fetch(`${API_CONFIG.baseURL}/tenants/${API_CONFIG.tenantId}/menu`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = `✓ OK (${data.length} productos)`;
+
+                    // Mostrar resumen
+                    const categories = {};
+                    data.forEach(item => {
+                        categories[item.category] = (categories[item.category] || 0) + 1;
+                    });
+
+                    resultsEl.innerHTML = Object.entries(categories).map(([cat, count]) => `
+                        <div class="metric">
+                            <strong>${cat}</strong>
+                            ${count} productos
+                        </div>
+                    `).join('');
+
+                    responseEl.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = '✗ Error';
+                responseEl.textContent = error.message;
+            }
+        }
+
+        // Test 2: Tenants
+        async function testTenants() {
+            const statusEl = document.getElementById('tenants-status');
+            const responseEl = document.getElementById('tenants-response');
+
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'Cargando...';
+
+            try {
+                const response = await fetch(`${API_CONFIG.baseURL}/tenants`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = `✓ OK (${data.length} tenants)`;
+                    responseEl.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = '✗ Error';
+                responseEl.textContent = error.message;
+            }
+        }
+
+        // Test 3: Dashboard
+        async function testDashboard() {
+            const statusEl = document.getElementById('dashboard-status');
+            const responseEl = document.getElementById('dashboard-response');
+
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'Cargando...';
+
+            try {
+                const response = await fetch(`${API_CONFIG.baseURL}/tenants/${API_CONFIG.tenantId}/dashboard`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = '✓ OK';
+                    responseEl.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = '✗ Error';
+                responseEl.textContent = error.message;
+            }
+        }
+
+        // Test 4: Crear Pedido
+        async function testCreateOrder() {
+            const statusEl = document.getElementById('order-status');
+            const responseEl = document.getElementById('order-response');
+
+            statusEl.className = 'status loading';
+            statusEl.textContent = 'Creando pedido...';
+
+            const testOrder = {
+                items: [
+                    {
+                        product_id: "48738342-1efb-4ff5-b863-e8c644339c2e",
+                        name: "Pollo Entero",
+                        price: 62.9,
+                        quantity: 1
+                    }
+                ],
+                customer_name: "Test Cliente",
+                customer_address: "Av. Test 123, Lima",
+                customer_phone: "+51999999999"
+            };
+
+            try {
+                const response = await fetch(
+                    `${API_CONFIG.baseURL}/tenants/${API_CONFIG.tenantId}/orders`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(testOrder)
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = '✓ Pedido creado';
+                    responseEl.textContent = `Order ID: ${data.order_id}\n\n` + JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${JSON.stringify(data)}`);
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = '✗ Error';
+                responseEl.textContent = error.message;
+            }
+        }
+
+        // Ejecutar tests automáticamente al cargar
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(testMenu, 500);
+            setTimeout(testTenants, 1000);
+            setTimeout(testDashboard, 1500);
+        });
+    </script>
+</body>
+</html>
