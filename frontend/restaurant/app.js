@@ -104,48 +104,157 @@ function displayOrders() {
     });
 }
 
-// Crear tarjeta de orden
+// Crear tarjeta de orden mejorada
 function createOrderCard(order) {
     const card = document.createElement('div');
     card.className = 'order-card';
+    card.dataset.orderId = order.order_id;
 
-    const createdDate = new Date(order.created_at).toLocaleString('es-PE', {
-        dateStyle: 'short',
-        timeStyle: 'short'
+    // Calcular tiempo transcurrido
+    const createdDate = new Date(order.created_at);
+    const now = new Date();
+    const minutesElapsed = Math.floor((now - createdDate) / 1000 / 60);
+
+    const createdTimeStr = createdDate.toLocaleString('es-PE', {
+        hour: '2-digit',
+        minute: '2-digit'
     });
 
+    // Determinar urgencia por tiempo
+    let urgencyClass = '';
+    if (minutesElapsed > 60) urgencyClass = 'urgent';
+    else if (minutesElapsed > 30) urgencyClass = 'warning';
+
     let itemsList = '';
+    let totalItems = 0;
     if (order.items && order.items.length > 0) {
-        itemsList = '<ul>';
+        itemsList = '<div class="order-items-list">';
         order.items.forEach(item => {
-            itemsList += `<li>${item.name} x ${item.quantity}</li>`;
+            totalItems += item.quantity;
+            itemsList += `
+                <div class="order-item">
+                    <span class="item-quantity">${item.quantity}x</span>
+                    <span class="item-name">${item.name}</span>
+                </div>
+            `;
         });
-        itemsList += '</ul>';
+        itemsList += '</div>';
+    }
+
+    // Botón de acción rápida según el estado
+    let quickActionBtn = '';
+    const nextStates = {
+        'RECEIVED': { status: 'COOKING', label: '👨‍🍳 Iniciar Cocina', role: 'KITCHEN_STAFF' },
+        'COOKING': { status: 'PACKING', label: '📦 Empacar', role: 'PACKER' },
+        'PACKING': { status: 'DELIVERING', label: '🚗 Enviar', role: 'DELIVERY_DRIVER' },
+        'DELIVERING': { status: 'DELIVERED', label: '✅ Entregar', role: 'DELIVERY_DRIVER' }
+    };
+
+    if (nextStates[order.status]) {
+        const next = nextStates[order.status];
+        quickActionBtn = `
+            <button class="btn btn-quick-action" onclick="quickUpdateStatus('${order.order_id}', '${next.status}', '${next.role}')">
+                ${next.label}
+            </button>
+        `;
     }
 
     card.innerHTML = `
-        <div class="order-header">
-            <span class="order-id">Pedido #${order.order_id.substring(0, 8)}</span>
-            <span class="status-badge status-${order.status}">${getStatusText(order.status)}</span>
-        </div>
-        <div class="order-details">
-            <p><strong>Cliente:</strong> ${order.customer_name}</p>
-            <p><strong>Dirección:</strong> ${order.customer_address}</p>
-            <p><strong>Teléfono:</strong> ${order.customer_phone || 'N/A'}</p>
-            <p><strong>Creado:</strong> ${createdDate}</p>
-            ${itemsList ? `<div class="order-items">${itemsList}</div>` : ''}
-        </div>
-        <div class="order-actions">
-            <button class="btn btn-primary" onclick='openUpdateModal(${JSON.stringify(order)})'>
-                Actualizar Estado
-            </button>
-            <button class="btn btn-secondary" onclick="viewOrderDetails('${order.order_id}')">
-                Ver Detalles
-            </button>
+        <div class="order-card-inner ${urgencyClass}">
+            <div class="order-header" onclick="toggleOrderDetails('${order.order_id}')">
+                <div class="order-title">
+                    <span class="order-id">📋 #${order.order_id.substring(0, 8)}</span>
+                    <span class="order-time ${urgencyClass}"">⏱️ ${minutesElapsed} min</span>
+                </div>
+                <span class="status-badge status-${order.status}">${getStatusText(order.status)}</span>
+            </div>
+
+            <div class="order-customer" onclick="toggleOrderDetails('${order.order_id}')">
+                <div class="customer-name">👤 ${order.customer_name}</div>
+                <div class="customer-address">📍 ${order.customer_address}</div>
+                ${order.customer_phone ? `<div class="customer-phone">📞 ${order.customer_phone}</div>` : ''}
+            </div>
+
+            <div class="order-summary" onclick="toggleOrderDetails('${order.order_id}')">
+                <span class="items-count">🍽️ ${totalItems} producto${totalItems !== 1 ? 's' : ''}</span>
+                <span class="order-created">🕐 ${createdTimeStr}</span>
+            </div>
+
+            <div class="order-items-section" id="items-${order.order_id}" style="display: none;">
+                <div class="items-header">📝 Detalles del Pedido:</div>
+                ${itemsList}
+            </div>
+
+            <div class="order-actions">
+                ${quickActionBtn}
+                <button class="btn btn-details" onclick="viewOrderDetails('${order.order_id}')">
+                    📊 Ver Timeline
+                </button>
+            </div>
         </div>
     `;
 
     return card;
+}
+
+// Toggle para mostrar/ocultar items
+function toggleOrderDetails(orderId) {
+    const itemsSection = document.getElementById(`items-${orderId}`);
+    if (itemsSection) {
+        const isVisible = itemsSection.style.display !== 'none';
+        itemsSection.style.display = isVisible ? 'none' : 'block';
+
+        // Animar la transición
+        if (!isVisible) {
+            itemsSection.style.maxHeight = '0';
+            setTimeout(() => {
+                itemsSection.style.maxHeight = '500px';
+            }, 10);
+        }
+    }
+}
+
+// Actualización rápida de estado
+async function quickUpdateStatus(orderId, newStatus, role) {
+    const userName = localStorage.getItem('restaurantUser') || 'admin';
+
+    try {
+        const response = await fetch(
+            `${API_CONFIG.baseURL}/tenants/${API_CONFIG.tenantId}/orders/${orderId}/step`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    status: newStatus,
+                    by: userName,
+                    by_role: role
+                })
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Error al actualizar el estado');
+        }
+
+        showNotification(
+            `✅ Pedido actualizado a ${getStatusText(newStatus)}`,
+            'success'
+        );
+
+        // Animar la tarjeta antes de actualizar
+        const card = document.querySelector(`[data-order-id="${orderId}"]`);
+        if (card) {
+            card.style.transform = 'scale(0.95)';
+            card.style.opacity = '0.5';
+        }
+
+        setTimeout(refreshDashboard, 500);
+
+    } catch (error) {
+        console.error('Error updating order:', error);
+        showNotification(`❌ Error: ${error.message}`, 'error');
+    }
 }
 
 // Mostrar pedidos recientes
@@ -269,8 +378,8 @@ async function updateOrderStatus() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     status: newStatus,
-                    attended_by: attendedBy,
-                    role: role
+                    by: attendedBy,
+                    by_role: role
                 })
             }
         );
@@ -298,7 +407,7 @@ async function updateOrderStatus() {
     }
 }
 
-// Ver detalles de la orden
+// Ver detalles de la orden con modal mejorado
 async function viewOrderDetails(orderId) {
     try {
         const response = await fetch(
@@ -309,27 +418,54 @@ async function viewOrderDetails(orderId) {
 
         const metrics = await response.json();
 
-        // Mostrar detalles en una notificación grande
-        let details = `📦 Pedido #${orderId.substring(0, 8)}\n\n`;
-        details += `Estado: ${getStatusText(metrics.current_status)}\n`;
-        details += `Cliente: ${metrics.customer_name}\n\n`;
+        // Crear modal personalizado para timeline
+        let timelineHTML = '<div class="timeline-modal">';
+        timelineHTML += `<h3>📊 Timeline del Pedido #${orderId.substring(0, 8)}</h3>`;
+        timelineHTML += `<div class="timeline-info">`;
+        timelineHTML += `<p><strong>Cliente:</strong> ${metrics.customer_name}</p>`;
+        timelineHTML += `<p><strong>Estado:</strong> <span class="status-badge status-${metrics.current_status}">${getStatusText(metrics.current_status)}</span></p>`;
+        timelineHTML += `</div>`;
 
         if (metrics.timeline && metrics.timeline.length > 0) {
-            details += `Timeline:\n`;
-            metrics.timeline.forEach(event => {
-                details += `• ${getStatusText(event.status)} - ${event.attended_by} (${new Date(event.timestamp).toLocaleTimeString('es-PE')})\n`;
+            timelineHTML += '<div class="timeline-steps">';
+            metrics.timeline.forEach((event, index) => {
+                const time = new Date(event.timestamp).toLocaleTimeString('es-PE');
+                timelineHTML += `
+                    <div class="timeline-step ${index === metrics.timeline.length - 1 ? 'current' : ''}">
+                        <div class="step-marker">${index + 1}</div>
+                        <div class="step-content">
+                            <div class="step-status">${getStatusText(event.status)}</div>
+                            <div class="step-details">
+                                ${event.attended_by} - ${time}
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
+            timelineHTML += '</div>';
         }
 
         if (metrics.total_time) {
-            details += `\nTiempo total: ${metrics.total_time.minutes} minutos`;
+            timelineHTML += `<div class="timeline-summary">`;
+            timelineHTML += `<p><strong>⏱️ Tiempo total:</strong> ${metrics.total_time.minutes} minutos</p>`;
+            if (metrics.estimated_remaining_time) {
+                timelineHTML += `<p><strong>⏳ Tiempo estimado restante:</strong> ${metrics.estimated_remaining_time.minutes} minutos</p>`;
+            }
+            timelineHTML += `</div>`;
         }
 
-        if (metrics.estimated_remaining_time) {
-            details += `\nTiempo estimado restante: ${metrics.estimated_remaining_time.minutes} minutos`;
-        }
+        timelineHTML += '</div>';
 
-        alert(details);
+        // Mostrar en alert mejorado (temporal, se puede mejorar con un modal)
+        const detailsModal = document.createElement('div');
+        detailsModal.className = 'details-modal-overlay';
+        detailsModal.innerHTML = `
+            <div class="details-modal-content">
+                ${timelineHTML}
+                <button class="btn btn-close" onclick="this.closest('.details-modal-overlay').remove()">Cerrar</button>
+            </div>
+        `;
+        document.body.appendChild(detailsModal);
 
     } catch (error) {
         console.error('Error loading order details:', error);
