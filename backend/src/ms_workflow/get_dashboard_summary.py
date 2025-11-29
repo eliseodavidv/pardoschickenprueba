@@ -23,6 +23,11 @@ def get_order_timeline_metrics(order):
         "order_id": order.get("order_id"),
         "status": order.get("status"),
         "created_at": order.get("created_at"),
+        "customer_name": order.get("customer_name", "Sin nombre"),
+        "customer_address": order.get("customer_address", "Sin dirección"),
+        "customer_phone": order.get("customer_phone", ""),
+        "customer_email": order.get("customer_email", ""),
+        "items": order.get("items", []),
         "phases": {}
     }
 
