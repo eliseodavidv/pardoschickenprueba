@@ -21,7 +21,7 @@ async function loadMenu() {
         'Anticuchos (3 unid)': { image_url: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500&q=80', description: 'Anticuchos de corazón con papa y choclo' },
         'Chorizo Parrillero': { image_url: 'https://brimaliindustrial.com.pe/wp-content/uploads/2023/09/123-2.png', description: 'Chorizo argentino con papa dorada' },
         'Mollejitas': { image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80', description: 'Mollejas a la parrilla con limón' },
-        'Tequeños (6 unid)': { image_url: 'https://media-cdn.tripadvisor.com/media/photo-s/1b/22/44/8b/tequenos-with-guacamole.jpg', description: 'Tequeños de queso con salsa golf' },
+        'Tequeños (6 unid)': { image_url: 'https://fideoslapasta.com.pe/wp-content/uploads/2017/12/tequeno.jpg', description: 'Tequeños de queso con salsa golf' },
         'Ensalada César': { image_url: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&q=80', description: 'Lechuga, pollo, crutones y aderezo césar' },
         'Ensalada Palta Reina': { image_url: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80', description: 'Palta rellena con pollo y verduras' },
         'Inca Kola 1.5L': { image_url: 'https://tofuu.getjusto.com/orioneat-local/resized2/gFvCdWbGefdZCx2tG-2400-x.webp', description: 'Gaseosa Inca Kola de 1.5 litros' },
